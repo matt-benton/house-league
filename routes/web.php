@@ -7,6 +7,7 @@ Route::livewire('/teams', 'pages::team.index')->name('teams.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::livewire('/teams/create', 'pages::team.create')->name('teams.create');
 });
 
 require __DIR__.'/settings.php';

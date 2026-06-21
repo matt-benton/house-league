@@ -34,7 +34,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * indicate that the model's email address should be unverified.
      */
     public function unverified(): static
     {
@@ -47,4 +47,11 @@ class UserFactory extends Factory
      * Indicate that the model has two-factor authentication configured.
      */
     public function withTwoFactor(): static {}
+
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_admin' => 1,
+        ]);
+    }
 }

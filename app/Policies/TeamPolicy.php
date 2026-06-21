@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 class TeamPolicy
 {
@@ -26,9 +27,11 @@ class TeamPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**
