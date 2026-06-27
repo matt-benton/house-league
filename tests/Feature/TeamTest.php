@@ -33,3 +33,11 @@ test('can create a team', function () {
     expect($team->abbreviation)->toBe('TST');
     expect($team->name)->toBe('Test');
 });
+
+test('it renders the show page', function () {
+    $team = Team::factory()->make();
+
+    Livewire::test('pages::team.show', ['team' => $team])
+        ->assertSeeText($team->abbreviation)
+        ->assertSeeText($team->name);
+});
