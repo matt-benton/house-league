@@ -41,3 +41,26 @@ test('it renders the show page', function () {
         ->assertSeeText($team->abbreviation)
         ->assertSeeText($team->name);
 });
+
+test('it can edit a team', function () {
+    $team = Team::factory()
+        ->state([
+            'abbreviation' => 'TST',
+            'name' => 'Test Team',
+        ])
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::team.edit', ['team' => $team])
+        ->assertSet('abbreviation', 'TST')
+        ->assertSet('name', 'Test Team')
+        ->set('abbreviation', '123')
+        ->set('name', 'Changed Team')
+        ->call('save');
+
+    $team->refresh();
+
+    expect($team->abbreviation)->toBe('123');
+    expect($team->name)->toBe('Changed Team');
+});

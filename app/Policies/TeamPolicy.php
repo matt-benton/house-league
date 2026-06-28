@@ -37,9 +37,11 @@ class TeamPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Team $team): bool
+    public function update(User $user, Team $team): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**

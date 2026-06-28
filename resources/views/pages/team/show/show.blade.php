@@ -6,6 +6,6 @@
     </flux:breadcrumbs>
     <flux:card class="mt-7">
         <flux:heading size="lg">{{ $team->abbreviation }} - {{ $team->name }}</flux:heading>
-        <flux:button href="/teams/{{ $team->id }}/edit" icon="cog-6-tooth" class="mt-5">Manage</flux:button>
+        <flux:button href="/teams/{{ $team->id }}/edit" icon="cog-6-tooth" class="mt-5" wire:navigate>Manage</flux:button>
     </flux:card>
 </div>
