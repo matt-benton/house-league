@@ -64,3 +64,31 @@ test('it can edit a team', function () {
     expect($team->abbreviation)->toBe('123');
     expect($team->name)->toBe('Changed Team');
 });
+
+test('it can soft delete a team', function () {
+    $team = Team::factory()->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::team.edit', ['team' => $team])
+        ->call('delete');
+
+    $team->refresh();
+
+    expect($team->deleted_at)->toBeTruthy();
+});
+
+test('it can restore a soft deleted team', function () {
+    $team = Team::factory()
+        ->state(['deleted_at' => now()])
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::team.edit', ['team' => $team])
+        ->call('restore');
+
+    $team->refresh();
+
+    expect($team->deleted_at)->toBeNull();
+});

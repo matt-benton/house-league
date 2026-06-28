@@ -33,6 +33,24 @@ new class extends Component
         Flux::toast(variant: 'success', text: 'Team has been updated');
     }
 
+    public function delete()
+    {
+        $this->authorize('delete', $this->team);
+
+        $this->team->delete();
+
+        Flux::toast(variant: 'success', text: 'Team has been deleted');
+    }
+
+    public function restore()
+    {
+        $this->authorize('restore', $this->team);
+
+        $this->team->restore();
+
+        Flux::toast(variant: 'success', text: 'Team has been restored');
+    }
+
     public function updatedAbbreviation(string $value): void
     {
         $this->abbreviation = strtoupper($value);

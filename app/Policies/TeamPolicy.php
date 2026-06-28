@@ -47,17 +47,21 @@ class TeamPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Team $team): bool
+    public function delete(User $user, Team $team): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Team $team): bool
+    public function restore(User $user, Team $team): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**
