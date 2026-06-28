@@ -25,6 +25,7 @@
     @else
         <flux:callout color="amber" icon="trash">
             <flux:callout.heading>This team has been deleted</flux:callout.heading>
+            <flux:callout.text>If this was not intended you can restore the team</flux:callout.text>
             <x-slot name="actions">
                 <flux:button href="/teams" variant="primary" wire:navigate>Go to Teams</flux:button>
                 <flux:button wire:click="restore">Restore</flux:button>
