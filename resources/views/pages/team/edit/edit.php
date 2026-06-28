@@ -22,6 +22,12 @@ new class extends Component
         $this->name = $team->name;
     }
 
+    public function render()
+    {
+        return $this->view()
+            ->title('Manage: '.$this->team->name);
+    }
+
     public function save()
     {
         $this->validate();

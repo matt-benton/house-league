@@ -15,8 +15,11 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="user-group" :href="route('teams.index')" :current="request()->routeIs('teams.index')" wire:navigate>
+                    <flux:sidebar.item icon="flag" :href="route('teams.index')" :current="request()->routeIs('teams.index')" wire:navigate>
                         {{ __('Teams') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="user-group" :href="route('players.index')" :current="request()->routeIs('players.index')" wire:navigate>
+                        {{ __('Players') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>

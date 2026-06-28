@@ -9,7 +9,14 @@ new class extends Component
 
     public function mount(Team $team)
     {
+        $this->authorize('view', $team);
+
         $this->team = $team;
     }
-};
 
+    public function render()
+    {
+        return $this->view()
+            ->title($this->team->name);
+    }
+};

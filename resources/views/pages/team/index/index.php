@@ -12,6 +12,8 @@ new #[Title('Teams')] class extends Component
 
     public function mount()
     {
+        $this->authorize('viewAny', Team::class);
+
         $this->teams = Team::all();
     }
 };
