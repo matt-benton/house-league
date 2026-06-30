@@ -9,5 +9,5 @@
             </li>
         @endforeach
     </ul>
-    <flux:button href="/teams/create" class="mt-6 float-end" variant="primary" wire:navigate>New Team</flux:button>
+    <flux:button href="/teams/create" class="mt-6 float-end" variant="primary" icon="flag" wire:navigate>New Team</flux:button>
 </div>

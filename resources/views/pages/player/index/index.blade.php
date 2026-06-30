@@ -17,5 +17,5 @@
             </flux:card>
         @endforeach
     </ul>
-    <flux:button href="/players/create" class="mt-6 float-end" variant="primary" wire:navigate>New Player</flux:button>
+    <flux:button href="/players/create" class="mt-6 float-end" variant="primary" icon="user" wire:navigate>New Player</flux:button>
 </div>
