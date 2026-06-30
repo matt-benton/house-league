@@ -6,7 +6,7 @@
     </flux:breadcrumbs>
     <flux:card class="mt-7 space-y-5">
         <flux:heading size="xl">#{{ $player->number }} {{ $player->name }}</flux:heading>
-        <flux:text>{{ ucfirst($player->position) }}</flux:text>
+        <flux:text>{{ ucfirst($player->position->value) }}</flux:text>
         @if ($player->team)
             <div>
                 <flux:link variant="ghost" href="/teams/{{ $player->team->id }}" wire:navigate>

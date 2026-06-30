@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Position;
 use App\Models\Scopes\OrderByNameScope;
 use Database\Factories\PlayerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -19,6 +20,13 @@ class Player extends Model
     use HasFactory;
 
     use SoftDeletes;
+
+    protected function casts(): array
+    {
+        return [
+            'position' => Position::class,
+        ];
+    }
 
     public function team(): BelongsTo
     {

@@ -6,7 +6,7 @@
                 <flux:heading size="lg">
                     <flux:link href="/players/{{ $player->id }}" variant="ghost" wire:navigate>{{ $player->name }}</flux:link>
                 </flux:heading>
-                <flux:text>{{ $player->number }} - {{ ucfirst($player->position) }}</flux:text>
+                <flux:text>{{ $player->number }} - {{ ucfirst($player->position->value) }}</flux:text>
                 <flux:text>
                     @if ($player->team_id)
                         <flux:link href="/teams/{{ $player->team_id }}" variant="ghost" wire:navigate>{{ $player->team->name }}</flux:link>

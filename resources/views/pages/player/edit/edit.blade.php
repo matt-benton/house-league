@@ -7,12 +7,39 @@
     </flux:breadcrumbs>
 
     @unless ($player->trashed())
-        <flux:card>
+        <flux:card class="mt-9">
             <form wire:submit="save" class="space-y-5">
                 <flux:field>
-                    <flux:label>Player Name</flux:label>
+                    <flux:label>Name</flux:label>
                     <flux:input wire:model="name" autocomplete="off" />
                     <flux:error name="name" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Number</flux:label>
+                    <flux:input wire:model="number" autocomplete="off" maxlength="2" />
+                    <flux:error name="number" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Position</flux:label>
+                    <flux:select wire:model="position" placeholder="Choose position...">
+                        @foreach ($positions as $position)
+                            <flux:select.option>{{ $position }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="position" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Team</flux:label>
+                    <flux:select wire:model="teamId">
+                        <flux:select.option value="">None</flux:select.option>
+                        @foreach ($teams as $team)
+                            <flux:select.option value="{{ $team->id }}">{{ $team->name }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="teamId" />
                 </flux:field>
 
                 <div class="flex justify-end">

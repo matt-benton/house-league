@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Position;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
@@ -32,7 +33,7 @@ test('it can create a player', function () {
 
     expect($player->name)->toBe('John Doe');
     expect($player->number)->toBe(99);
-    expect($player->position)->toBe('defender');
+    expect($player->position->value)->toBe('defender');
     expect($player->team_id)->toBe($team->id);
 });
 
@@ -89,4 +90,36 @@ test('it can restore a deleted player', function () {
     $player->refresh();
 
     expect($player->deleted_at)->toBeNull();
+});
+
+test('it can edit a player', function () {
+    $teams = Team::factory()->count(2)->create();
+    $player = Player::factory()
+        ->state([
+            'name' => 'Test Player',
+            'number' => '28',
+            'position' => 'forward',
+        ])
+        ->for($teams[1])
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::player.edit', ['player' => $player])
+        ->assertSet('name', 'Test Player')
+        ->assertSet('number', '28')
+        ->assertSet('position', 'forward')
+        ->assertSet('teamId', $teams[1]->id)
+        ->set('name', 'Edited')
+        ->set('number', '11')
+        ->set('position', 'goalkeeper')
+        ->set('teamId', $teams[0]->id)
+        ->call('save');
+
+    $player->refresh();
+
+    expect($player->name)->toBe('Edited');
+    expect($player->number)->toBe(11);
+    expect($player->position)->toBe(Position::Goalkeeper);
+    expect($player->team_id)->toBe($teams[0]->id);
 });
