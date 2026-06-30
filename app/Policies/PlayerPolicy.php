@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Player;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 class PlayerPolicy
 {
@@ -26,33 +27,41 @@ class PlayerPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Player $player): bool
+    public function update(User $user, Player $player): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Player $player): bool
+    public function delete(User $user, Player $player): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Player $player): bool
+    public function restore(User $user, Player $player): Response
     {
-        return false;
+        return $user->is_admin
+            ? Response::allow()
+            : Response::deny('Only an admin can perform this action');
     }
 
     /**

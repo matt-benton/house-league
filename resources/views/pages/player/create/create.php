@@ -24,6 +24,8 @@ new #[Title('New Player')] class extends Component
 
     public function mount()
     {
+        $this->authorize('create', Player::class);
+
         $this->positions = Position::values();
         $this->position = Position::Forward;
         $this->teams = Team::all();

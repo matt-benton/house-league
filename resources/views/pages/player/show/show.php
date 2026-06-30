@@ -11,5 +11,10 @@ new class extends Component
     {
         $this->player = $player;
     }
-};
 
+    public function render()
+    {
+        return $this->view()
+            ->title($this->player->name);
+    }
+};
