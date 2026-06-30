@@ -44,3 +44,12 @@ test('it can create a player with no team', function () {
 
     expect($player->team_id)->toBeNull();
 });
+
+test('it can show player info', function () {
+    $player = Player::factory()
+        ->for(Team::factory())
+        ->create();
+
+    Livewire::test('pages::player.show', ['player' => $player])
+        ->assertSeeText($player->name);
+});

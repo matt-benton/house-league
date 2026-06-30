@@ -4,7 +4,7 @@
         @foreach ($players as $player)
             <flux:card class="space-y-3">
                 <flux:heading size="lg">
-                    <flux:link href="/players/{{ $player->id }}" variant="ghost">{{ $player->name }}</flux:link>
+                    <flux:link href="/players/{{ $player->id }}" variant="ghost" wire:navigate>{{ $player->name }}</flux:link>
                 </flux:heading>
                 <flux:text>{{ $player->number }} - {{ ucfirst($player->position) }}</flux:text>
                 <flux:text>
