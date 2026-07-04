@@ -50,3 +50,16 @@ test('it can show a post', function () {
         ->assertSee('Test post')
         ->assertSee('This is a test post');
 });
+
+test('it can delete a post', function () {
+    $post = Post::factory()
+        ->for(User::factory()->admin(), 'author')
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::post.edit', ['post' => $post])
+        ->call('delete');
+
+    expect(Post::count())->toBe(0);
+});
