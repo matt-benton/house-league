@@ -13,9 +13,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::livewire('/players/create', 'pages::player.create')->name('players.create');
     Route::livewire('/players/{player}/edit', 'pages::player.edit')->name('players.edit')->withTrashed();
+
+    Route::livewire('/posts/create', 'pages::post.create')->name('posts.create');
 });
 
 Route::livewire('/teams/{team}', 'pages::team.show')->name('teams.show')->withTrashed();
 Route::livewire('/players/{player}', 'pages::player.show')->name('players.show')->withTrashed();
+Route::livewire('/posts/{post}', 'pages::post.show')->name('posts.show');
 
 require __DIR__.'/settings.php';

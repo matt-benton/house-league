@@ -13,3 +13,40 @@ test('it can see a list of posts', function () {
     Livewire::test('pages::dashboard')
         ->assertSee('This is a new post');
 });
+
+test('it can create a post', function () {
+    expect(Post::count())->toBe(0);
+
+    $user = User::factory()->admin()->create();
+
+    $this->actingAs($user);
+
+    Livewire::test('pages::post.create')
+        ->set('title', 'New season for House League')
+        ->set('text', '<p>This is the inaugural season for House League</p>')
+        ->call('publish');
+
+    expect(Post::count())->toBe(1);
+
+    $post = Post::first();
+
+    expect($post->title)->toBe('New season for House League');
+    expect($post->text)->toBe('<p>This is the inaugural season for House League</p>');
+    expect($post->user_id)->toBe($user->id);
+});
+
+test('it can show a post', function () {
+    $author = User::factory()->admin()->create();
+
+    $post = Post::factory()
+        ->for($author, 'author')
+        ->state([
+            'title' => 'Test post',
+            'text' => 'This is a test post',
+        ])
+        ->create();
+
+    Livewire::test('pages::post.show', ['post' => $post])
+        ->assertSee('Test post')
+        ->assertSee('This is a test post');
+});
