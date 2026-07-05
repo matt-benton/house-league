@@ -1,13 +1,24 @@
 <div>
-    <flux:breadcrumbs>
+    <flux:breadcrumbs class="mb-7">
         <flux:breadcrumbs.item href="/dashboard" icon="home" wire:navigate />
         <flux:breadcrumbs.item href="/posts/{{ $post->id }}" wire:navigate>{{ $post->title }}</flux:breadcrumb>
         <flux:breadcrumbs.item>Edit Post</flux:breadcrumb>
     </flux:breadcrumbs>
+
+    <form wire:submit="save" class="space-y-5">
+        <flux:field>
+            <flux:label>Title</flux:label>
+            <flux:input wire:model="title" autocomplete="off" />
+            <flux:error name="title" />
+        </flux:field>
+        <flux:editor wire:model="text" label="Text" />
+        <flux:button type="submit" variant="primary" icon="pencil" class="float-end">Save</flux:button>
+    </form>
+
     <flux:modal.trigger name="delete">
         <flux:button
             icon="trash"
-            class="float-right"
+            class="float-right mr-1"
         >
             Delete
         </flux:button>

@@ -9,11 +9,33 @@ new #[Title('Edit Post')] class extends Component
 {
     public Post $post;
 
+    public string $title;
+
+    public string $text;
+
     public function mount(Post $post)
     {
         $this->authorize('update', $post);
 
         $this->post = $post;
+
+        $this->title = $post->title;
+
+        $this->text = $post->text;
+    }
+
+    public function save()
+    {
+        $this->authorize('update', $this->post);
+
+        $this->post->title = $this->title;
+        $this->post->text = $this->text;
+        $this->post->save();
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Post has been updated',
+        );
     }
 
     public function delete()

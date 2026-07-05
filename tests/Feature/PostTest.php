@@ -63,3 +63,27 @@ test('it can delete a post', function () {
 
     expect(Post::count())->toBe(0);
 });
+
+test('it can edit a post', function () {
+    $post = Post::factory()
+        ->for(User::factory()->admin(), 'author')
+        ->state([
+            'title' => 'Test Title for Edit',
+            'text' => '<p>This is going to be edited</p>',
+        ])
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::post.edit', ['post' => $post])
+        ->assertSet('title', 'Test Title for Edit')
+        ->assertSet('text', '<p>This is going to be edited</p>')
+        ->set('title', 'Title has been edited')
+        ->set('text', '<h1>The text has been edited</h1>')
+        ->call('save');
+
+    $post->refresh();
+
+    expect($post->title)->toBe('Title has been edited');
+    expect($post->text)->toBe('<h1>The text has been edited</h1>');
+});
