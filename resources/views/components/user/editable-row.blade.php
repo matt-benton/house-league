@@ -15,10 +15,21 @@ new class extends Component
 
         $this->isAdmin = $user->is_admin;
     }
+
+    public function updatedIsAdmin()
+    {
+        if ($this->isAdmin == 1) {
+            $this->user->is_admin = 1;
+        } else {
+            $this->user->is_admin = 0;
+        }
+
+        $this->user->save();
+    }
 };
 ?>
 
-<flux:table.row :key="$user->id">
+<flux:table.row>
     <flux:table.cell>{{ $user->name }}</flux:table.cell>
     <flux:table.cell>{{ $user->email }}</flux:table.cell>
     <flux:table.cell>

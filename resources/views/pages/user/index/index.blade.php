@@ -8,7 +8,7 @@
 
         <flux:table.rows>
             @foreach ($this->users as $user)
-                <livewire:user.editable-row :user="$user" />
+                <livewire:user.editable-row :user="$user" :key="$user->id" />
             @endforeach
         </flux:table.rows>
     </flux:table>
