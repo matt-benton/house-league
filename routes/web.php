@@ -2,10 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::livewire('/', 'pages::dashboard')->name('dashboard');
 Route::livewire('/teams', 'pages::team.index')->name('teams.index');
 Route::livewire('/players', 'pages::player.index')->name('players.index');
-Route::livewire('/dashboard', 'pages::dashboard')->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('/teams/create', 'pages::team.create')->name('teams.create');

@@ -1,6 +1,6 @@
 <div>
     <flux:breadcrumbs class="mb-7">
-        <flux:breadcrumbs.item href="/dashboard" icon="home" wire:navigate />
+        <flux:breadcrumbs.item :href="route('dashboard')" icon="home" wire:navigate />
         <flux:breadcrumbs.item href="/posts/{{ $post->id }}" wire:navigate>{{ $post->title }}</flux:breadcrumb>
         <flux:breadcrumbs.item>Edit Post</flux:breadcrumb>
     </flux:breadcrumbs>

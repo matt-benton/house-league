@@ -49,6 +49,6 @@ new #[Title('Edit Post')] class extends Component
             text: 'Post has been deleted',
         );
 
-        $this->redirect('/dashboard', true);
+        $this->redirect(route('dashboard', absolute: false), true);
     }
 };

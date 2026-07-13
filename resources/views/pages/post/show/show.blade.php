@@ -1,6 +1,6 @@
 <div>
     <flux:breadcrumbs class="mb-7">
-        <flux:breadcrumbs.item href="/dashboard" icon="home" wire:navigate />
+        <flux:breadcrumbs.item :href="route('dashboard')" icon="home" wire:navigate />
     </flux:breadcrumbs>
     <flux:card class="mb-3">
         <flux:heading size="lg" class="mb-2">{{ $post->title }}</flux:heading>
