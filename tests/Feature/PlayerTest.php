@@ -44,6 +44,7 @@ test('it can create a player with no team', function () {
         ->set('name', 'John Doe')
         ->set('number', '99')
         ->set('position', 'defender')
+        ->set('teamId', '')
         ->call('save');
 
     $player = Player::first();
@@ -122,4 +123,20 @@ test('it can edit a player', function () {
     expect($player->number)->toBe(11);
     expect($player->position)->toBe(Position::Goalkeeper);
     expect($player->team_id)->toBe($teams[0]->id);
+});
+
+test('it can clear a player team', function () {
+    $player = Player::factory()
+        ->for(Team::factory())
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::player.edit', ['player' => $player])
+        ->set('teamId', '')
+        ->call('save');
+
+    $player->refresh();
+
+    expect($player->team_id)->toBeNull();
 });

@@ -33,13 +33,13 @@ new #[Title('New Player')] class extends Component
 
     public function save()
     {
-        $this->validate();
+        $validated = $this->validate();
 
         Player::create([
-            'name' => $this->name,
-            'number' => $this->number,
-            'position' => $this->position,
-            'team_id' => $this->teamId,
+            'name' => $validated['name'],
+            'number' => $validated['number'],
+            'position' => $validated['position'],
+            'team_id' => $validated['teamId'],
         ]);
 
         Flux::toast(variant: 'success', text: $this->name.' created successfully');
@@ -55,6 +55,13 @@ new #[Title('New Player')] class extends Component
             'position' => ['required', Rule::enum(Position::class)],
             'teamId' => 'nullable|exists:teams,id',
         ];
+    }
+
+    protected function prepareForValidation($attributes): array
+    {
+        $attributes['teamId'] = $attributes['teamId'] === '' ? null : $attributes['teamId'];
+
+        return $attributes;
     }
 
     protected function validationAttributes()

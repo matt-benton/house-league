@@ -42,12 +42,12 @@ new class extends Component
 
     public function save()
     {
-        $this->validate();
+        $validated = $this->validate();
 
-        $this->player->name = $this->name;
-        $this->player->number = $this->number;
-        $this->player->team_id = $this->teamId;
-        $this->player->position = $this->position;
+        $this->player->name = $validated['name'];
+        $this->player->number = $validated['number'];
+        $this->player->team_id = $validated['teamId'];
+        $this->player->position = $validated['position'];
         $this->player->save();
 
         Flux::toast(variant: 'success', text: 'Player has been updated');
@@ -85,5 +85,12 @@ new class extends Component
             'position' => ['required', Rule::enum(Position::class)],
             'teamId' => 'nullable|exists:teams,id',
         ];
+    }
+
+    protected function prepareForValidation($attributes): array
+    {
+        $attributes['teamId'] = $attributes['teamId'] === '' ? null : $attributes['teamId'];
+
+        return $attributes;
     }
 };
