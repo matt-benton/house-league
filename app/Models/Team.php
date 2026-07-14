@@ -22,7 +22,7 @@ class Team extends Model
     use SoftDeletes;
 
     /**
-     * Get the user's first name.
+     * @return Attribute<string, never>
      */
     protected function abbreviation(): Attribute
     {
@@ -31,6 +31,9 @@ class Team extends Model
         );
     }
 
+    /**
+     * @return HasMany<Player, $this>
+     */
     public function roster(): HasMany
     {
         return $this->hasMany(Player::class)->orderBy('position');

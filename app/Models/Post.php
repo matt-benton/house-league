@@ -12,6 +12,9 @@ class Post extends Model
     /** @use HasFactory<PostFactory> */
     use HasFactory;
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

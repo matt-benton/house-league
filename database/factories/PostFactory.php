@@ -17,9 +17,12 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
+        /** @var list<string> $paragraphs */
+        $paragraphs = $this->faker->paragraphs(3);
+
         return [
             'title' => $this->faker->sentence,
-            'text' => collect($this->faker->paragraphs(3))
+            'text' => collect($paragraphs)
                 ->map(fn ($paragraph) => "<p>{$paragraph}</p>")
                 ->join(''),
         ];
