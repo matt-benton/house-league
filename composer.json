@@ -12,12 +12,12 @@
         "php": "^8.3",
         "laravel/chisel": "^0.1.0",
         "laravel/fortify": "^1.37.2",
-        "laravel/framework": "^13.7",
+        "laravel/framework": "^13.20",
         "laravel/tinker": "^3.0",
         "livewire/blaze": "^1.0",
-        "livewire/flux": "^2.13.1",
+        "livewire/flux": "^2.14",
         "livewire/flux-pro": "^2.15",
-        "livewire/livewire": "^4.1"
+        "livewire/livewire": "^4.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
@@ -115,9 +115,11 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": [{
-        "name": "flux-pro",
-        "type": "composer",
-        "url": "https://composer.fluxui.dev"
-    }]
+    "repositories": [
+        {
+            "name": "flux-pro",
+            "type": "composer",
+            "url": "https://composer.fluxui.dev"
+        }
+    ]
 }
