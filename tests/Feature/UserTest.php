@@ -19,5 +19,5 @@ test('it can set a user as admin', function () {
         ->assertSet('isAdmin', 0)
         ->set('isAdmin', 1);
 
-    expect($user->fresh()->is_admin)->toBe(true);
+    expect($user->fresh()->is_admin)->toBe(1);
 });
