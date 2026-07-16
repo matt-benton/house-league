@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (config('app.env' === 'local')) {
+        if (config('app.env') === 'local') {
             User::factory()->create([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
