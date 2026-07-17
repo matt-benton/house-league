@@ -17,6 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('/posts/{post}/edit', 'pages::post.edit')->name('posts.edit');
 
     Route::livewire('/users', 'pages::user.index')->name('users.index');
+
+    Route::livewire('/games/create', 'pages::game.create')->name('games.create');
+    Route::livewire('/games/{game}/edit', 'pages::game.edit')->name('games.edit');
 });
 
 Route::livewire('/teams/{team}', 'pages::team.show')->name('teams.show')->withTrashed();

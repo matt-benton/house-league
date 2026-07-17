@@ -4,7 +4,7 @@
         <flux:card class="space-y-2">
             <flux:button
                 variant="primary"
-                href="/posts/create"
+                href="{{ route('posts.create') }}"
                 icon="pencil"
                 wire:navigate
                 size="sm"
@@ -14,7 +14,7 @@
             </flux:button>
             <flux:button
                 variant="primary"
-                href="/matches/create"
+                href="{{ route('games.create') }}"
                 icon="ticket"
                 wire:navigate
                 size="sm"
