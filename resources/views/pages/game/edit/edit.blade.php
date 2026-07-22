@@ -17,7 +17,7 @@
             <flux:text variant="subtle">{{ $game->homeTeam->name }}</flux:text>
             <ul class="space-y-1">
                 @foreach ($game->homeTeam->roster->sortBy('position') as $player)
-                    <li class="flex items-baseline gap-2">
+                    <li class="flex items-baseline gap-2" :key="$player->id">
                         <flux:text size="sm">#{{ $player->number }}</flux:text>
                         <flux:text size="lg" variant="strong">{{ $player->name }}</flux:text>
                         <flux:text variant="subtle">{{ $player->position }}</flux:text>
@@ -29,7 +29,7 @@
             <flux:text variant="subtle">{{ $game->awayTeam->name }}</flux:text>
             <ul class="space-y-2">
                 @foreach ($game->awayTeam->roster->sortBy('position') as $player)
-                    <li class="flex items-baseline gap-2">
+                    <li class="flex items-baseline gap-2" :key="$player->id">
                         <flux:text size="sm">#{{ $player->number }}</flux:text>
                         <flux:text size="lg" variant="strong">{{ $player->name }}</flux:text>
                         <flux:text variant="subtle">{{ $player->position }}</flux:text>
@@ -176,8 +176,31 @@
             </flux:menu>
         </flux:dropdown>
 
-        <flux:button>
-            End Match
-        </flux:button>
+        <flux:modal.trigger name="end-match">
+            <flux:button variant="danger">End Match</flux:button>
+        </flux:modal.trigger>
+
+        <flux:modal name="end-match" class="min-w-[22rem]">
+            <div class="space-y-6">
+                <div>
+                    <flux:heading size="lg">Full time?</flux:heading>
+
+                    <flux:text class="mt-2">
+                        The referee is looking at his watch.<br>
+                        Blow the whistle?
+                    </flux:text>
+                </div>
+
+                <div class="flex gap-2">
+                    <flux:spacer />
+
+                    <flux:modal.close>
+                        <flux:button variant="ghost">Still more time...</flux:button>
+                    </flux:modal.close>
+
+                    <flux:button type="submit" variant="primary" wire:click="endGame">Blow the Whistle</flux:button>
+                </div>
+            </div>
+        </flux:modal>
     </div>
 </div>

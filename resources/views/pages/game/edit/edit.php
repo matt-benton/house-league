@@ -97,6 +97,30 @@ new class extends Component
         );
     }
 
+    public function endGame()
+    {
+        $this->game->is_complete = 1;
+        $this->game->save();
+
+        $winningTeam = null;
+
+        if ($this->homeScore > $this->awayScore) {
+            $winningTeam = $this->game->homeTeam;
+        } elseif ($this->awayScore > $this->homeScore) {
+            $winningTeam = $this->game->awayTeam;
+        }
+
+        Flux::toast(
+            variant: 'success',
+            text: $winningTeam
+                ? "{$winningTeam->name} win! Final score: {$this->homeScore} ({$this->game->homeTeam->abbreviation}) - {$this->awayScore} ({$this->game->awayTeam->abbreviation})"
+                : "Tie game! Final score: {$this->homeScore} ({$this->game->homeTeam->abbreviation}) - {$this->awayScore} ({$this->game->awayTeam->abbreviation})",
+            duration: 10000,
+        );
+
+        $this->redirect('/', navigate: true);
+    }
+
     #[Computed]
     public function allPlayers()
     {

@@ -144,3 +144,20 @@ test('a player can make a save', function () {
     expect($save->game_id)->toBe($game->id);
     expect($save->type)->toBe('save');
 });
+
+test('it can end a match', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()->create();
+    $away = Team::factory()->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('endGame');
+
+    expect($game->fresh()->is_complete)->toBeTruthy();
+});
