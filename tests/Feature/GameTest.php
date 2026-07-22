@@ -84,3 +84,33 @@ test('a player can receive a yellow card', function () {
     expect($card->game_id)->toBe($game->id);
     expect($card->type)->toBe('yellow card');
 });
+
+test('a player can receive a red card', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    $player = $home->roster[0];
+
+    expect(GameEvent::count())->toBe(0);
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('giveRedCard', $player->id);
+
+    expect(GameEvent::count())->toBe(1);
+
+    $card = GameEvent::first();
+
+    expect($card->player_id)->toBe($player->id);
+    expect($card->team_id)->toBe($home->id);
+    expect($card->game_id)->toBe($game->id);
+    expect($card->type)->toBe('red card');
+});

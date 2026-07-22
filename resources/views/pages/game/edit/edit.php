@@ -63,6 +63,23 @@ new class extends Component
         );
     }
 
+    public function giveRedCard($playerId)
+    {
+        $player = Player::find($playerId);
+
+        $card = new GameEvent;
+        $card->type = GameEventType::RedCard;
+        $card->player_id = $player->id;
+        $card->team_id = $player->team_id;
+        $card->game_id = $this->game->id;
+        $card->save();
+
+        Flux::toast(
+            variant: 'danger',
+            text: "{$player->name} has been given a red card",
+        );
+    }
+
     #[Computed]
     public function allPlayers()
     {

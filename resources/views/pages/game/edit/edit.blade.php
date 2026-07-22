@@ -56,6 +56,12 @@
                             <flux:icon.exclamation-triangle variant="micro" />
                         </flux:timeline.indicator>
                         @break
+
+                    @case(GameEventType::RedCard->value)
+                        <flux:timeline.indicator color="red">
+                            <flux:icon.x-mark variant="micro" />
+                        </flux:timeline.indicator>
+                        @break
                 @endswitch
 
                 <flux:timeline.content>
@@ -66,6 +72,10 @@
 
                         @case(GameEventType::YellowCard->value)
                             <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            @break
+
+                        @case(GameEventType::RedCard->value)
+                            <flux:text>Red card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
                             @break
                     @endswitch
                 </flux:timeline.content>
@@ -116,9 +126,25 @@
             </flux:menu>
         </flux:dropdown>
 
-        <flux:button>
-            Red Card
-        </flux:button>
+        <flux:dropdown>
+            <flux:button icon:trailing="chevron-down">
+                Red Card
+            </flux:button>
+
+            <flux:menu>
+                <flux:menu.submenu heading="{{ $game->homeTeam->abbreviation }}">
+                    @foreach ($game->homeTeam->roster as $homePlayer)
+                        <flux:menu.item wire:click="giveRedCard({{ $homePlayer->id }})">{{ $homePlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+
+                <flux:menu.submenu heading="{{ $game->awayTeam->abbreviation }}">
+                    @foreach ($game->awayTeam->roster as $awayPlayer)
+                        <flux:menu.item wire:click="giveRedCard({{ $awayPlayer->id }})">{{ $awayPlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+            </flux:menu>
+        </flux:dropdown>
 
         <flux:button>
             Save
