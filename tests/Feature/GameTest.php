@@ -114,3 +114,33 @@ test('a player can receive a red card', function () {
     expect($card->game_id)->toBe($game->id);
     expect($card->type)->toBe('red card');
 });
+
+test('a player can make a save', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    $player = $home->roster[0];
+
+    expect(GameEvent::count())->toBe(0);
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('recordSave', $player->id);
+
+    expect(GameEvent::count())->toBe(1);
+
+    $save = GameEvent::first();
+
+    expect($save->player_id)->toBe($player->id);
+    expect($save->team_id)->toBe($home->id);
+    expect($save->game_id)->toBe($game->id);
+    expect($save->type)->toBe('save');
+});

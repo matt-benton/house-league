@@ -80,6 +80,23 @@ new class extends Component
         );
     }
 
+    public function recordSave($playerId)
+    {
+        $player = Player::find($playerId);
+
+        $save = new GameEvent;
+        $save->type = GameEventType::Save;
+        $save->player_id = $player->id;
+        $save->team_id = $player->team_id;
+        $save->game_id = $this->game->id;
+        $save->save();
+
+        Flux::toast(
+            variant: 'success',
+            text: "Save by {$player->name}!",
+        );
+    }
+
     #[Computed]
     public function allPlayers()
     {

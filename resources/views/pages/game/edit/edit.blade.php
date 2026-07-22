@@ -62,6 +62,12 @@
                             <flux:icon.x-mark variant="micro" />
                         </flux:timeline.indicator>
                         @break
+
+                    @case(GameEventType::Save->value)
+                        <flux:timeline.indicator>
+                            <flux:icon.no-symbol variant="micro" />
+                        </flux:timeline.indicator>
+                        @break
                 @endswitch
 
                 <flux:timeline.content>
@@ -76,6 +82,10 @@
 
                         @case(GameEventType::RedCard->value)
                             <flux:text>Red card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            @break
+
+                        @case(GameEventType::Save->value)
+                            <flux:text>Save by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
                             @break
                     @endswitch
                 </flux:timeline.content>
@@ -146,9 +156,25 @@
             </flux:menu>
         </flux:dropdown>
 
-        <flux:button>
-            Save
-        </flux:button>
+        <flux:dropdown>
+            <flux:button icon:trailing="chevron-down">
+                Save
+            </flux:button>
+
+            <flux:menu>
+                <flux:menu.submenu heading="{{ $game->homeTeam->abbreviation }}">
+                    @foreach ($game->homeTeam->roster as $homePlayer)
+                        <flux:menu.item wire:click="recordSave({{ $homePlayer->id }})">{{ $homePlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+
+                <flux:menu.submenu heading="{{ $game->awayTeam->abbreviation }}">
+                    @foreach ($game->awayTeam->roster as $awayPlayer)
+                        <flux:menu.item wire:click="recordSave({{ $awayPlayer->id }})">{{ $awayPlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+            </flux:menu>
+        </flux:dropdown>
 
         <flux:button>
             End Match
