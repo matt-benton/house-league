@@ -44,14 +44,28 @@
     <flux:timeline>
         @foreach ($game->events as $event)
             <flux:timeline.item>
-                <flux:timeline.indicator color="green">
-                    <flux:icon.check variant="micro" />
-                </flux:timeline.indicator>
+                @switch ($event->type)
+                    @case(GameEventType::Goal->value)
+                        <flux:timeline.indicator color="green">
+                            <flux:icon.check variant="micro" />
+                        </flux:timeline.indicator>
+                        @break
+
+                    @case(GameEventType::YellowCard->value)
+                        <flux:timeline.indicator color="yellow">
+                            <flux:icon.exclamation-triangle variant="micro" />
+                        </flux:timeline.indicator>
+                        @break
+                @endswitch
 
                 <flux:timeline.content>
                     @switch ($event->type)
                         @case(GameEventType::Goal->value)
                             <flux:text>Goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            @break
+
+                        @case(GameEventType::YellowCard->value)
+                            <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
                             @break
                     @endswitch
                 </flux:timeline.content>
@@ -82,9 +96,25 @@
             </flux:menu>
         </flux:dropdown>
 
-        <flux:button>
-            Yellow Card
-        </flux:button>
+        <flux:dropdown>
+            <flux:button icon:trailing="chevron-down">
+                Yellow Card
+            </flux:button>
+
+            <flux:menu>
+                <flux:menu.submenu heading="{{ $game->homeTeam->abbreviation }}">
+                    @foreach ($game->homeTeam->roster as $homePlayer)
+                        <flux:menu.item wire:click="giveYellowCard({{ $homePlayer->id }})">{{ $homePlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+
+                <flux:menu.submenu heading="{{ $game->awayTeam->abbreviation }}">
+                    @foreach ($game->awayTeam->roster as $awayPlayer)
+                        <flux:menu.item wire:click="giveYellowCard({{ $awayPlayer->id }})">{{ $awayPlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+            </flux:menu>
+        </flux:dropdown>
 
         <flux:button>
             Red Card

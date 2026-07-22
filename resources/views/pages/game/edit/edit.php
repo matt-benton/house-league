@@ -36,13 +36,30 @@ new class extends Component
         $goal = new GameEvent;
         $goal->type = GameEventType::Goal;
         $goal->player_id = $player->id;
-        $goal->team_id = $player->team->id;
+        $goal->team_id = $player->team_id;
         $goal->game_id = $this->game->id;
         $goal->save();
 
         Flux::toast(
             variant: 'success',
             text: "Goooooaallll!!!! {$player->name} has scored!",
+        );
+    }
+
+    public function giveYellowCard($playerId)
+    {
+        $player = Player::find($playerId);
+
+        $card = new GameEvent;
+        $card->type = GameEventType::YellowCard;
+        $card->player_id = $player->id;
+        $card->team_id = $player->team_id;
+        $card->game_id = $this->game->id;
+        $card->save();
+
+        Flux::toast(
+            variant: 'warning',
+            text: "{$player->name} has been given a yellow card",
         );
     }
 
