@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Game;
+use App\Models\GameEvent;
+use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
 use Livewire\Livewire;
@@ -19,4 +21,36 @@ test('it can create a game', function () {
         ->call('save');
 
     expect(Game::count())->toBe(1);
+});
+
+test('a player can score a goal', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    $player = $home->roster[0];
+
+    expect(GameEvent::count())->toBe(0);
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('scoreGoal', $player->id)
+        ->assertSet('homeScore', 1)
+        ->assertSet('awayScore', 0);
+
+    expect(GameEvent::count())->toBe(1);
+
+    $goal = GameEvent::first();
+
+    expect($goal->player_id)->toBe($player->id);
+    expect($goal->team_id)->toBe($home->id);
+    expect($goal->game_id)->toBe($game->id);
+    expect($goal->type)->toBe('goal');
 });
