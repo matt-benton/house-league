@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Game;
 use App\Models\Post;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -20,5 +21,14 @@ new class extends Component
         return Post::query()
             ->latest()
             ->paginate(10);
+    }
+
+    #[Computed]
+    public function matches()
+    {
+        return Game::query()
+            ->latest()
+            ->limit(5)
+            ->get();
     }
 };

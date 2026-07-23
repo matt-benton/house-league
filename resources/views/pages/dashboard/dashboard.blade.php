@@ -1,7 +1,7 @@
 <div>
     @if(auth()->user()?->is_admin)
         <flux:heading size="xl" class="mb-3">Actions</flux:heading>
-        <flux:card class="space-y-2">
+        <flux:card class="space-y-2 mb-5">
             <flux:button
                 variant="primary"
                 href="{{ route('posts.create') }}"
@@ -24,7 +24,23 @@
             </flux:button>
         </flux:card>
     @endif
-    <flux:heading size="xl" class="my-3">News</flux:heading>
+
+    <flux:heading size="xl" class="mb-3">Latest Scores</flux:heading>
+    @if ($this->matches->isEmpty())
+        <flux:callout icon="clock">
+            <flux:callout.heading>Stay tuned</flux:callout.heading>
+            <flux:callout.text>Check back soon for live scores</flux:callout.text>
+        </flux:callout>
+    @else
+        @foreach ($this->matches as $match)
+            <x-score-card :match="$match" />
+            @unless ($loop->last)
+                <flux:separator />
+            @endunless
+        @endforeach
+    @endif
+
+    <flux:heading size="xl" class="mb-3 mt-5">Headlines</flux:heading>
     @if ($this->posts->isNotEmpty())
         <flux:card class="space-y-11">
             @foreach ($this->posts as $post)
