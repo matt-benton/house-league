@@ -98,8 +98,34 @@
                     </flux:timeline.content>
                 </flux:timeline.item>
             @endforeach
+
+            @unless ($game->is_complete)
+                <flux:timeline.item>
+                    <flux:timeline.block>
+                        <flux:callout variant="secondary">
+                            <flux:callout.heading>Match still in progress</flux:callout.heading>
+
+                            <x-slot name="actions">
+                                <flux:button variant="primary" href="/games/{{ $game->id }}/edit" wire:navigate>
+                                    Continue Match
+                                </flux:button>
+                            </x-slot>
+                        </flux:callout>
+                    </flux:timelime.block>
+                </flux:timeline.item>
+            @endunless
         </flux:timeline>
     @else
-        <flux:callout icon="clock">No game events have been recorded yet.</flux:callout>
+        <flux:callout icon="clock">
+            <flux:callout.heading>No highlights recorded</flux:callout.heading>
+
+            @unless ($game->is_complete)
+                <x-slot name="actions">
+                    <flux:button variant="primary" href="/games/{{ $game->id }}/edit" wire:navigate>
+                        Continue Match
+                    </flux:button>
+                </x-slot>
+            @endunless
+        </flux:callout>
     @endif
 </div>
