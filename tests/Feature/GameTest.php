@@ -29,6 +29,37 @@ test('it displays a list of games', function () {
         ->assertSeeText($teams->pluck('abbreviation')->all());
 });
 
+test('it displays a game with its teams and score', function () {
+    $home = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    GameEvent::factory()->count(2)->create([
+        'type' => 'goal',
+        'game_id' => $game->id,
+        'player_id' => $home->roster->first()->id,
+        'team_id' => $home->id,
+    ]);
+    GameEvent::factory()->create([
+        'type' => 'goal',
+        'game_id' => $game->id,
+        'player_id' => $away->roster->first()->id,
+        'team_id' => $away->id,
+    ]);
+
+    $this->get(route('games.show', $game))
+        ->assertOk()
+        ->assertSeeText([$home->name, $away->name])
+        ->assertSeeTextInOrder(['2', '-', '1']);
+});
+
 test('it can create a game', function () {
     $home = Team::factory()->create();
     $away = Team::factory()->create();

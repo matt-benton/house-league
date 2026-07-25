@@ -9,9 +9,11 @@
         <div class="grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 gap-6">
             @foreach ($this->games as $game)
                 <div wire:key="game-{{ $game->id }}">
-                    <flux:card size="sm">
-                        <x-score-card :match="$game" />
-                    </flux:card>
+                    <a href="/games/{{ $game->id }}" wire:navigate>
+                        <flux:card size="sm">
+                            <x-score-card :match="$game" />
+                        </flux:card>
+                    </a>
                 </div>
             @endforeach
         </div>

@@ -26,5 +26,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::livewire('/teams/{team}', 'pages::team.show')->name('teams.show')->withTrashed();
 Route::livewire('/players/{player}', 'pages::player.show')->name('players.show')->withTrashed();
 Route::livewire('/posts/{post}', 'pages::post.show')->name('posts.show');
+Route::livewire('/games/{game}', 'pages::game.show')->name('games.show');
 
 require __DIR__.'/settings.php';

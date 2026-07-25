@@ -1,0 +1,105 @@
+@use('App\Enums\GameEventType')
+<div>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item :href="route('games.index')" wire:navigate>Games</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ $game->homeTeam->abbreviation }} vs {{ $game->awayTeam->abbreviation }}</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+
+    <flux:card class="mt-7">
+        <div class="flex justify-center">
+            @if ($game->is_complete)
+                <flux:badge>Full Time</flux:badge>
+            @else
+                <flux:badge color="red" variant="solid">Live</flux:badge>
+            @endif
+        </div>
+
+        <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-8">
+            <div class="min-w-0 text-center">
+                <flux:text class="truncate" variant="subtle">Home</flux:text>
+                <flux:heading size="xl" class="mt-1">{{ $game->homeTeam->name }}</flux:heading>
+            </div>
+
+            <div class="flex items-center gap-3 sm:gap-5">
+                <span class="text-4xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->homeScore }}</span>
+                <span class="text-xl text-zinc-400 sm:text-2xl">-</span>
+                <span class="text-4xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->awayScore }}</span>
+            </div>
+
+            <div class="min-w-0 text-center">
+                <flux:text class="truncate" variant="subtle">Away</flux:text>
+                <flux:heading size="xl" class="mt-1">{{ $game->awayTeam->name }}</flux:heading>
+            </div>
+        </div>
+
+        @if ($game->is_complete)
+            <div class="mt-7 text-center">
+                @if ($this->homeScore > $this->awayScore)
+                    <flux:text variant="strong">{{ $game->homeTeam->name }} won the match.</flux:text>
+                @elseif ($this->awayScore > $this->homeScore)
+                    <flux:text variant="strong">{{ $game->awayTeam->name }} won the match.</flux:text>
+                @else
+                    <flux:text variant="strong">The match ended in a draw.</flux:text>
+                @endif
+            </div>
+        @endif
+    </flux:card>
+
+    <flux:separator text="Highlights" variant="subtle" class="my-9" />
+
+    @if ($game->events->isNotEmpty())
+        <flux:timeline>
+            @foreach ($game->events as $event)
+                <flux:timeline.item wire:key="game-event-{{ $event->id }}">
+                    @switch ($event->type)
+                        @case(GameEventType::Goal->value)
+                            <flux:timeline.indicator color="green">
+                                <flux:icon.check variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
+
+                        @case(GameEventType::YellowCard->value)
+                            <flux:timeline.indicator color="yellow">
+                                <flux:icon.exclamation-triangle variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
+
+                        @case(GameEventType::RedCard->value)
+                            <flux:timeline.indicator color="red">
+                                <flux:icon.x-mark variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
+
+                        @case(GameEventType::Save->value)
+                            <flux:timeline.indicator>
+                                <flux:icon.no-symbol variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
+                    @endswitch
+
+                    <flux:timeline.content>
+                        @switch ($event->type)
+                            @case(GameEventType::Goal->value)
+                                <flux:text>Goal by {{ $event->player->name }} ({{ $event->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::YellowCard->value)
+                                <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::RedCard->value)
+                                <flux:text>Red card given to {{ $event->player->name }} ({{ $event->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::Save->value)
+                                <flux:text>Save by {{ $event->player->name }} ({{ $event->team->abbreviation }})</flux:text>
+                                @break
+                        @endswitch
+                    </flux:timeline.content>
+                </flux:timeline.item>
+            @endforeach
+        </flux:timeline>
+    @else
+        <flux:callout icon="clock">No game events have been recorded yet.</flux:callout>
+    @endif
+</div>

@@ -33,9 +33,11 @@
         </flux:callout>
     @else
         @foreach ($this->matches as $match)
-            <div class="py-4">
-                <x-score-card :match="$match" />
-            </div>
+            <a href="/games/{{ $match->id }}" wire:navigate>
+                <div class="py-4">
+                    <x-score-card :match="$match" />
+                </div>
+            </a>
             @unless ($loop->last)
                 <flux:separator />
             @endunless
