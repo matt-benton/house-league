@@ -1,12 +1,12 @@
 <div class="grid grid-cols-[min-content_1fr_1fr]">
-    <div class="row-span-2 flex items-center w-16 py-4">
+    <div class="row-span-2 flex items-center w-16">
         @unless ($match->is_complete)
             <flux:badge color="red" variant="solid" size="sm">Live</flux:badge>
         @else
             <flux:badge size="sm">FT</flux:badge>
         @endunless
     </div>
-    <div class="py-4 space-y-2">
+    <div class="space-y-2">
         @if ($match->is_complete && $homeScore > $awayScore)
             <flux:text variant="strong">{{ $match->homeTeam->abbreviation }}</flux:text>
             <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
@@ -18,7 +18,7 @@
             <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
         @endif
     </div>
-    <div class="text-right py-4 space-y-2">
+    <div class="text-right space-y-2">
         @if ($match->is_complete && $homeScore > $awayScore)
             <flux:text variant="strong">{{ $homeScore }}</flux:text>
             <flux:text>{{ $awayScore }}</flux:text>

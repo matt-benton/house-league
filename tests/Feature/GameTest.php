@@ -7,6 +7,28 @@ use App\Models\Team;
 use App\Models\User;
 use Livewire\Livewire;
 
+test('it displays a list of games', function () {
+    $teams = Team::factory()->count(4)->create();
+
+    Game::factory()
+        ->for($teams[0], 'homeTeam')
+        ->for($teams[1], 'awayTeam')
+        ->create();
+
+    Game::factory()
+        ->for($teams[2], 'homeTeam')
+        ->for($teams[3], 'awayTeam')
+        ->create();
+
+    $this->get(route('games.index'))
+        ->assertOk()
+        ->assertSeeText($teams->pluck('abbreviation')->all());
+
+    Livewire::test('pages::game.index')
+        ->assertCount('games', 2)
+        ->assertSeeText($teams->pluck('abbreviation')->all());
+});
+
 test('it can create a game', function () {
     $home = Team::factory()->create();
     $away = Team::factory()->create();

@@ -33,11 +33,14 @@
         </flux:callout>
     @else
         @foreach ($this->matches as $match)
-            <x-score-card :match="$match" />
+            <div class="py-4">
+                <x-score-card :match="$match" />
+            </div>
             @unless ($loop->last)
                 <flux:separator />
             @endunless
         @endforeach
+        <flux:link href="/games" wire:navigate class="text-xs">View All</flux:link>
     @endif
 
     <flux:heading size="xl" class="mb-3 mt-5">Headlines</flux:heading>
