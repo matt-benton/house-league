@@ -39,6 +39,9 @@ class Team extends Model
         return $this->hasMany(Player::class)->orderBy('position');
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function record(): Attribute
     {
         return Attribute::make(
