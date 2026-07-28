@@ -8,14 +8,32 @@
     </div>
     <div class="space-y-2">
         @if ($match->is_complete && $homeScore > $awayScore)
-            <flux:text variant="strong">{{ $match->homeTeam->abbreviation }}</flux:text>
-            <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
+            <div class="grid grid-cols-[48px_1fr] items-baseline">
+                <flux:text variant="strong">{{ $match->homeTeam->abbreviation }}</flux:text>
+                <flux:text size="sm" variant="subtle">{{ $match->homeTeam->record }}</flux:text>
+            </div>
+            <div class="grid grid-cols-[48px_1fr] items-baseline">
+                <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
+                <flux:text size="sm" variant="subtle">{{ $match->awayTeam->record }}</flux:text>
+            </div>
         @elseif ($match->is_complete && $homeScore < $awayScore)
-            <flux:text>{{ $match->homeTeam->abbreviation }}</flux:text>
-            <flux:text variant="strong">{{ $match->awayTeam->abbreviation }}</flux:text>
+            <div class="grid grid-cols-[48px_1fr] items-baseline">
+                <flux:text>{{ $match->homeTeam->abbreviation }}</flux:text>
+                <flux:text variant="subtle">{{ $match->homeTeam->record }}</flux:text>
+            </div>
+            <div class="grid grid-cols-[48px_1fr] items-baseline">
+                <flux:text variant="strong">{{ $match->awayTeam->abbreviation }}</flux:text>
+                <flux:text variant="subtle">{{ $match->awayTeam->record }}</flux:text>
+            </div>
         @else
-            <flux:text>{{ $match->homeTeam->abbreviation }}</flux:text>
-            <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
+            <div class="grid grid-cols-[48px_1fr] items-baseline">
+                <flux:text>{{ $match->homeTeam->abbreviation }}</flux:text>
+                <flux:text variant="subtle">{{ $match->homeTeam->record }}</flux:text>
+            </div>
+            <div class="grid grid-cols-[48px_1fr] items-baseline">
+                <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
+                <flux:text variant="subtle">{{ $match->awayTeam->record }}</flux:text>
+            </div>
         @endif
     </div>
     <div class="text-right space-y-2">

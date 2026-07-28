@@ -3,8 +3,10 @@
     <ul class="space-y-3">
         @foreach ($teams as $team)
             <li>
-                <flux:card>
-                    <flux:link href="/teams/{{ $team->id }}" variant="ghost">{{ $team->abbreviation }} - {{ $team->name }}</flux:text>
+                <flux:card class="flex items-baseline gap-2">
+                    <flux:link href="/teams/{{ $team->id }}" variant="ghost">{{ $team->name }}</flux:link>
+                    <flux:text>({{ $team->abbreviation }})</flux:text>
+                    <flux:text>{{ $team->record }}</flux:text>
                 </flux:card>
             </li>
         @endforeach

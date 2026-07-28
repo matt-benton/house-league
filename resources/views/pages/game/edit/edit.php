@@ -106,8 +106,27 @@ new class extends Component
 
         if ($this->homeScore > $this->awayScore) {
             $winningTeam = $this->game->homeTeam;
+            $winningTeam->wins++;
+            $winningTeam->save();
+
+            $losingTeam = $this->game->awayTeam;
+            $losingTeam->losses++;
+            $losingTeam->save();
         } elseif ($this->awayScore > $this->homeScore) {
             $winningTeam = $this->game->awayTeam;
+            $winningTeam->wins++;
+            $winningTeam->save();
+
+            $losingTeam = $this->game->homeTeam;
+            $losingTeam->losses++;
+            $losingTeam->save();
+        } else {
+            $homeTeam = $this->game->homeTeam;
+            $homeTeam->draws++;
+            $homeTeam->save();
+            $awayTeam = $this->game->awayTeam;
+            $awayTeam->draws++;
+            $awayTeam->save();
         }
 
         Flux::toast(

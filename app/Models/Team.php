@@ -38,4 +38,11 @@ class Team extends Model
     {
         return $this->hasMany(Player::class)->orderBy('position');
     }
+
+    protected function record(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes['wins'].'-'.$attributes['losses'].'-'.$attributes['draws']
+        );
+    }
 }

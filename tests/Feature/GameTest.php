@@ -214,3 +214,64 @@ test('it can end a match', function () {
 
     expect($game->fresh()->is_complete)->toBeTruthy();
 });
+
+test('a team can win a match', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()->create();
+    $away = Team::factory()->create();
+
+    $player = Player::factory()
+        ->for($home)
+        ->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('scoreGoal', $player->id)
+        ->call('endGame');
+
+    expect($home->fresh()->wins)->toBe(1);
+    expect($home->fresh()->losses)->toBe(0);
+    expect($home->fresh()->draws)->toBe(0);
+
+    expect($away->fresh()->wins)->toBe(0);
+    expect($away->fresh()->losses)->toBe(1);
+    expect($away->fresh()->draws)->toBe(0);
+});
+
+test('teams can draw a match', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()->create();
+    $away = Team::factory()->create();
+
+    $homePlayer = Player::factory()
+        ->for($home)
+        ->create();
+
+    $awayPlayer = Player::factory()
+        ->for($away)
+        ->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('scoreGoal', $homePlayer->id)
+        ->call('scoreGoal', $awayPlayer->id)
+        ->call('endGame');
+
+    expect($home->fresh()->wins)->toBe(0);
+    expect($home->fresh()->losses)->toBe(0);
+    expect($home->fresh()->draws)->toBe(1);
+
+    expect($away->fresh()->wins)->toBe(0);
+    expect($away->fresh()->losses)->toBe(0);
+    expect($away->fresh()->draws)->toBe(1);
+});

@@ -18,6 +18,7 @@
             <div class="min-w-0 text-center">
                 <flux:text class="truncate" variant="subtle">Home</flux:text>
                 <flux:heading size="xl" class="mt-1">{{ $game->homeTeam->name }}</flux:heading>
+                <flux:text>{{ $game->homeTeam->record }}</flux:text>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-5">
@@ -29,6 +30,7 @@
             <div class="min-w-0 text-center">
                 <flux:text class="truncate" variant="subtle">Away</flux:text>
                 <flux:heading size="xl" class="mt-1">{{ $game->awayTeam->name }}</flux:heading>
+                <flux:text>{{ $game->awayTeam->record }}</flux:text>
             </div>
         </div>
 
