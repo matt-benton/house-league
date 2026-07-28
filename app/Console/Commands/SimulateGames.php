@@ -84,6 +84,17 @@ class SimulateGames extends Command
                     }
                 }
 
+                if ($scores[$homeTeam->id] > $scores[$awayTeam->id]) {
+                    $homeTeam->increment('wins');
+                    $awayTeam->increment('losses');
+                } elseif ($scores[$awayTeam->id] > $scores[$homeTeam->id]) {
+                    $awayTeam->increment('wins');
+                    $homeTeam->increment('losses');
+                } else {
+                    $homeTeam->increment('draws');
+                    $awayTeam->increment('draws');
+                }
+
                 $game->is_complete = true;
                 $game->save();
 

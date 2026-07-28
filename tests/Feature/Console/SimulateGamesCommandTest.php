@@ -35,6 +35,22 @@ test('it simulates a complete game and fills short rosters', function () {
             ->toBeLessThanOrEqual(8);
     }
 
+    $homeScore = $game->goals()->where('team_id', $game->home_team_id)->count();
+    $awayScore = $game->goals()->where('team_id', $game->away_team_id)->count();
+    $homeTeam = $game->homeTeam->fresh();
+    $awayTeam = $game->awayTeam->fresh();
+
+    if ($homeScore > $awayScore) {
+        expect([$homeTeam->wins, $homeTeam->losses, $homeTeam->draws])->toBe([1, 0, 0])
+            ->and([$awayTeam->wins, $awayTeam->losses, $awayTeam->draws])->toBe([0, 1, 0]);
+    } elseif ($awayScore > $homeScore) {
+        expect([$homeTeam->wins, $homeTeam->losses, $homeTeam->draws])->toBe([0, 1, 0])
+            ->and([$awayTeam->wins, $awayTeam->losses, $awayTeam->draws])->toBe([1, 0, 0]);
+    } else {
+        expect([$homeTeam->wins, $homeTeam->losses, $homeTeam->draws])->toBe([0, 0, 1])
+            ->and([$awayTeam->wins, $awayTeam->losses, $awayTeam->draws])->toBe([0, 0, 1]);
+    }
+
     foreach ($game->events as $event) {
         expect($event->type)->toBe('goal')
             ->and([$game->home_team_id, $game->away_team_id])->toContain($event->team_id)
