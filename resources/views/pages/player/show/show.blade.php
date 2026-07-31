@@ -16,6 +16,27 @@
         @else
             <flux:text>No team</flux:text>
         @endif
+        <div class="grid grid-cols-4">
+            <div class="space-y-2">
+                <flux:text>Goals</flux:text>
+                <flux:heading size="xl">{{ $player->goals_count }}</flux:heading>
+            </div>
+
+            <div class="space-y-2">
+                <flux:text>Saves</flux:text>
+                <flux:heading size="xl">{{ $player->saves_count }}</flux:heading>
+            </div>
+
+            <div class="space-y-2">
+                <flux:text>Yellow Cards</flux:text>
+                <flux:heading size="xl">{{ $player->yellow_cards_count }}</flux:heading>
+            </div>
+
+            <div class="space-y-2">
+                <flux:text>Red Cards</flux:text>
+                <flux:heading size="xl">{{ $player->red_cards_count }}</flux:heading>
+            </div>
+        </div>
         <flux:button href="/players/{{ $player->id }}/edit" icon="cog-6-tooth" class="mt-5" wire:navigate>Manage</flux:button>
     </flux:card>
 </div>

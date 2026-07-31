@@ -9,7 +9,7 @@ new class extends Component
 
     public function mount(Player $player)
     {
-        $this->player = $player;
+        $this->player = $player->loadCount('goals', 'saves', 'yellowCards', 'redCards');
     }
 
     public function render()

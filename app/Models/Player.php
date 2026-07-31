@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GameEventType;
 use App\Enums\Position;
 use App\Models\Scopes\OrderByNameScope;
 use Database\Factories\PlayerFactory;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ScopedBy([OrderByNameScope::class])]
@@ -34,5 +36,25 @@ class Player extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function goals(): HasMany
+    {
+        return $this->hasMany(GameEvent::class)->where('type', GameEventType::Goal);
+    }
+
+    public function saves(): HasMany
+    {
+        return $this->hasMany(GameEvent::class)->where('type', GameEventType::Save);
+    }
+
+    public function yellowCards(): HasMany
+    {
+        return $this->hasMany(GameEvent::class)->where('type', GameEventType::YellowCard);
+    }
+
+    public function redCards(): HasMany
+    {
+        return $this->hasMany(GameEvent::class)->where('type', GameEventType::RedCard);
     }
 }
