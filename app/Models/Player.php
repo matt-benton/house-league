@@ -38,21 +38,33 @@ class Player extends Model
         return $this->belongsTo(Team::class);
     }
 
+    /**
+     * @return HasMany<GameEvent, $this>
+     */
     public function goals(): HasMany
     {
         return $this->hasMany(GameEvent::class)->where('type', GameEventType::Goal);
     }
 
+    /**
+     * @return HasMany<GameEvent, $this>
+     */
     public function saves(): HasMany
     {
         return $this->hasMany(GameEvent::class)->where('type', GameEventType::Save);
     }
 
+    /**
+     * @return HasMany<GameEvent, $this>
+     */
     public function yellowCards(): HasMany
     {
         return $this->hasMany(GameEvent::class)->where('type', GameEventType::YellowCard);
     }
 
+    /**
+     * @return HasMany<GameEvent, $this>
+     */
     public function redCards(): HasMany
     {
         return $this->hasMany(GameEvent::class)->where('type', GameEventType::RedCard);
