@@ -3,15 +3,12 @@
 use App\Models\Game;
 use App\Models\Team;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new #[Title('New Match')] class extends Component
 {
-    #[Validate('required|exists:teams,id', as: 'home team')]
     public $home_team_id = '';
 
-    #[Validate('required|exists:teams,id|different:home_team_id', as: 'away team')]
     public $away_team_id = '';
 
     public $teams;
@@ -33,5 +30,35 @@ new #[Title('New Match')] class extends Component
         ]);
 
         $this->redirect("/games/{$game->id}/edit", navigate: true);
+    }
+
+    protected function rules()
+    {
+        return [
+            'home_team_id' => [
+                'required',
+                'exists:players,team_id',
+            ],
+            'away_team_id' => [
+                'required',
+                'different:home_team_id',
+            ],
+        ];
+    }
+
+    protected function validationAttributes()
+    {
+        return [
+            'home_team_id' => 'home team',
+            'away_team_id' => 'away team',
+        ];
+    }
+
+    protected function messages()
+    {
+        return [
+            'home_team_id.exists' => 'The :attribute needs at least one player',
+            'away_team_id.exists' => 'The :attribute needs at least one player',
+        ];
     }
 };

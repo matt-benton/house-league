@@ -61,8 +61,12 @@ test('it displays a game with its teams and score', function () {
 });
 
 test('it can create a game', function () {
-    $home = Team::factory()->create();
-    $away = Team::factory()->create();
+    $home = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->create();
 
     expect(Game::count())->toBe(0);
 
