@@ -26,6 +26,12 @@ new class extends Component
         $this->gameEventTypes = GameEventType::cases();
     }
 
+    #[Computed]
+    public function events()
+    {
+        return $this->game->events()->get();
+    }
+
     public function render()
     {
         return $this->view()
@@ -98,6 +104,13 @@ new class extends Component
             variant: 'success',
             text: "Save by {$player->name}!",
         );
+    }
+
+    public function deleteEvent($gameEventId)
+    {
+        $event = $this->game->events->firstWhere('id', $gameEventId);
+
+        $event->delete();
     }
 
     public function endGame()

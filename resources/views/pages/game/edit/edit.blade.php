@@ -47,12 +47,12 @@
         </div>
     </div>
 
-    @if ($game->events->isNotEmpty())
+    @if ($this->events->isNotEmpty())
         <flux:separator text="Highlights" variant="subtle" class="mt-9 mb-9" />
 
         <flux:timeline>
-            @foreach ($game->events as $event)
-                <flux:timeline.item>
+            @foreach ($this->events as $event)
+                <flux:timeline.item wire:key="{{ $event->id }}">
                     @switch ($event->type)
                         @case(GameEventType::Goal->value)
                             <flux:timeline.indicator color="green">
@@ -82,19 +82,31 @@
                     <flux:timeline.content>
                         @switch ($event->type)
                             @case(GameEventType::Goal->value)
-                                <flux:text>Goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                <div class="flex items-center justify-between">
+                                    <flux:text>Goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                    <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
+                                </div>
                                 @break
 
                             @case(GameEventType::YellowCard->value)
-                                <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                <div class="flex items-center justify-between">
+                                    <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                    <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
+                                </div>
                                 @break
 
                             @case(GameEventType::RedCard->value)
-                                <flux:text>Red card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                <div class="flex items-center justify-between">
+                                    <flux:text>Red card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                    <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
+                                </div>
                                 @break
 
                             @case(GameEventType::Save->value)
-                                <flux:text>Save by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                <div class="flex items-center justify-between">
+                                    <flux:text>Save by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                    <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
+                                </div>
                                 @break
                         @endswitch
                     </flux:timeline.content>
