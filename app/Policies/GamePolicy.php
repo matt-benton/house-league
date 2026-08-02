@@ -47,9 +47,9 @@ class GamePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Game $game): Response
+    public function delete(?User $user, Game $game): Response
     {
-        return $user->is_admin
+        return $user?->is_admin
             ? Response::allow()
             : Response::deny('Only an admin can perform this action');
     }

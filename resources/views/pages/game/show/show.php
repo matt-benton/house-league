@@ -2,6 +2,7 @@
 
 use App\Enums\GameEventType;
 use App\Models\Game;
+use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -42,5 +43,49 @@ new class extends Component
     {
         return $this->view()
             ->title($this->game->homeTeam->abbreviation.' vs '.$this->game->awayTeam->abbreviation);
+    }
+
+    public function delete()
+    {
+        $this->authorize('delete', $this->game);
+
+        $this->updateTeamRecords();
+
+        $this->game->delete();
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Match has been deleted',
+        );
+
+        $this->redirect('/games', navigate: true);
+    }
+
+    private function updateTeamRecords()
+    {
+        if ($this->homeScore > $this->awayScore) {
+            $winningTeam = $this->game->homeTeam;
+            $winningTeam->wins--;
+            $winningTeam->save();
+
+            $losingTeam = $this->game->awayTeam;
+            $losingTeam->losses--;
+            $losingTeam->save();
+        } elseif ($this->awayScore > $this->homeScore) {
+            $winningTeam = $this->game->awayTeam;
+            $winningTeam->wins--;
+            $winningTeam->save();
+
+            $losingTeam = $this->game->homeTeam;
+            $losingTeam->losses--;
+            $losingTeam->save();
+        } else {
+            $homeTeam = $this->game->homeTeam;
+            $homeTeam->draws--;
+            $homeTeam->save();
+            $awayTeam = $this->game->awayTeam;
+            $awayTeam->draws--;
+            $awayTeam->save();
+        }
     }
 };

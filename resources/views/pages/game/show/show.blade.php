@@ -133,4 +133,31 @@
             </flux:callout>
         @endunless
     @endif
+
+    <flux:separator text="Actions" variant="subtle" class="my-9" />
+
+    <flux:modal.trigger name="delete-match">
+        <flux:button icon="trash">Delete Match</flux:button>
+    </flux:modal.trigger>
+
+    <flux:modal name="delete-match" class="min-w-[22rem]">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Delete match?</flux:heading>
+                <flux:text variant="strong" color="green" class="mt-2">
+                    This action cannot be reversed
+                </flux:text>
+                <flux:text class="mt-2">
+                    Are you sure you want to delete this match?
+                </flux:text>
+            </div>
+            <div class="flex gap-2">
+                <flux:spacer />
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancel</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" variant="danger" wire:click="delete">Confirm Delete</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\GameEventType;
 use App\Models\Game;
 use App\Models\GameEvent;
 use App\Models\Player;
@@ -58,6 +59,37 @@ test('it displays a game with its teams and score', function () {
         ->assertOk()
         ->assertSeeText([$home->name, $away->name])
         ->assertSeeTextInOrder(['2', '-', '1']);
+});
+
+test('it can delete a game with events', function () {
+    $this->actingAs(User::factory()->admin()->make());
+
+    $home = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->state(['wins' => 1])
+        ->create();
+    $away = Team::factory()
+        ->has(Player::factory(), 'roster')
+        ->state(['losses' => 1])
+        ->create();
+
+    $game = Game::factory()
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->has(GameEvent::factory()
+            ->state(['type' => GameEventType::Goal])
+            ->for($home)
+            ->for($home->roster[0]), 'events')
+        ->state(['is_complete' => 1])
+        ->create();
+
+    Livewire::test('pages::game.show', ['game' => $game])
+        ->call('delete');
+
+    expect(GameEvent::where('game_id', $game->id)->count())->toBe(0);
+    expect($game->fresh())->toBeNull();
+    expect($home->fresh()->wins)->toBe(0);
+    expect($away->fresh()->losses)->toBe(0);
 });
 
 test('it can create a game', function () {
