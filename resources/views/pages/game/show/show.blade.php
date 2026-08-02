@@ -1,7 +1,7 @@
 @use('App\Enums\GameEventType')
-<div>
+<div class="max-w-md mx-auto">
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item :href="route('games.index')" wire:navigate>Games</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item :href="route('games.index')" wire:navigate>Matches</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $game->homeTeam->abbreviation }} vs {{ $game->awayTeam->abbreviation }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 
@@ -17,19 +17,19 @@
         <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-8">
             <div class="min-w-0 text-center">
                 <flux:text class="truncate" variant="subtle">Home</flux:text>
-                <flux:heading size="xl" class="mt-1">{{ $game->homeTeam->name }}</flux:heading>
+                <flux:heading size="lg" class="mt-1">{{ $game->homeTeam->name }}</flux:heading>
                 <flux:text>{{ $game->homeTeam->record }}</flux:text>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-5">
-                <span class="text-4xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->homeScore }}</span>
+                <span class="text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->homeScore }}</span>
                 <span class="text-xl text-zinc-400 sm:text-2xl">-</span>
-                <span class="text-4xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->awayScore }}</span>
+                <span class="text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->awayScore }}</span>
             </div>
 
             <div class="min-w-0 text-center">
                 <flux:text class="truncate" variant="subtle">Away</flux:text>
-                <flux:heading size="xl" class="mt-1">{{ $game->awayTeam->name }}</flux:heading>
+                <flux:heading size="lg" class="mt-1">{{ $game->awayTeam->name }}</flux:heading>
                 <flux:text>{{ $game->awayTeam->record }}</flux:text>
             </div>
         </div>

@@ -1,5 +1,4 @@
-
-<div>
+<div class="max-w-md mx-auto">
     <flux:card>
         <form wire:submit="save" class="space-y-5">
             <flux:field>

@@ -1,4 +1,4 @@
-<div>
+<div class="max-w-md mx-auto">
     <flux:breadcrumbs class="mb-7">
         <flux:breadcrumbs.item :href="route('dashboard')" icon="home" wire:navigate />
     </flux:breadcrumbs>

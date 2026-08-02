@@ -1,4 +1,4 @@
-<div>
+<div class="max-w-md mx-auto">
     @if(auth()->user()?->is_admin)
         <flux:heading size="xl" class="mb-3">Actions</flux:heading>
         <flux:card class="space-y-2 mb-5">

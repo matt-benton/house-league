@@ -1,4 +1,4 @@
-<div>
+<div class="max-w-md mx-auto">
     <flux:heading size="lg" class="mb-3">Players</flux:heading>
     <ul class="space-y-3">
         @foreach ($players as $player)

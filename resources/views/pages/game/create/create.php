@@ -42,6 +42,7 @@ new #[Title('New Match')] class extends Component
             'away_team_id' => [
                 'required',
                 'different:home_team_id',
+                'exists:players,team_id',
             ],
         ];
     }

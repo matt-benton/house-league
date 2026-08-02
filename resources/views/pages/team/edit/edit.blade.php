@@ -1,4 +1,4 @@
-<div>
+<div class="max-w-md mx-auto">
     <flux:breadcrumbs class="mb-9">
         <flux:breadcrumbs.item href="/teams" wire:navigate>Teams</flux:breadcrumbs.item>
         <flux:breadcrumbs.item href="/teams/{{ $team->id }}" wire:navigate>{{ $team->name }}</flux:breadcrumbs.item>

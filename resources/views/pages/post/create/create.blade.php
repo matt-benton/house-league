@@ -1,5 +1,4 @@
-
-<div>
+<div class="max-w-md mx-auto">
     <flux:heading size="lg" class="mb-7">New Post</flux:heading>
     <form wire:submit="publish" class="space-y-5">
         <flux:field>

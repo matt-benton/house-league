@@ -1,5 +1,5 @@
 @use('App\Enums\GameEventType')
-<div>
+<div class="max-w-md mx-auto">
     <flux:badge color="red" class="mb-2" variant="solid">Live</flux:badge>
     <div class="flex justify-between mb-5">
         <flux:heading size="xl">{{ $game->homeTeam->name }}</flux:heading>
@@ -17,10 +17,14 @@
             <flux:text variant="subtle">{{ $game->homeTeam->name }}</flux:text>
             <ul class="space-y-1">
                 @foreach ($game->homeTeam->roster->sortBy('position') as $player)
-                    <li class="flex items-baseline gap-2" :key="$player->id">
-                        <flux:text size="sm">#{{ $player->number }}</flux:text>
-                        <flux:text size="lg" variant="strong">{{ $player->name }}</flux:text>
-                        <flux:text variant="subtle">{{ $player->position }}</flux:text>
+                    <li class="grid grid-cols-[24px_1fr] gap-3" :key="$player->id">
+                        <div class="flex items-center">
+                            <flux:text size="sm">#{{ $player->number }}</flux:text>
+                        </div>
+                        <div>
+                            <flux:text size="lg" variant="strong">{{ $player->name }}</flux:text>
+                            <flux:text variant="subtle">{{ $player->position }}</flux:text>
+                        </div>
                     </li>
                 @endforeach
             </ul>
@@ -29,75 +33,81 @@
             <flux:text variant="subtle">{{ $game->awayTeam->name }}</flux:text>
             <ul class="space-y-2">
                 @foreach ($game->awayTeam->roster->sortBy('position') as $player)
-                    <li class="flex items-baseline gap-2" :key="$player->id">
-                        <flux:text size="sm">#{{ $player->number }}</flux:text>
-                        <flux:text size="lg" variant="strong">{{ $player->name }}</flux:text>
-                        <flux:text variant="subtle">{{ $player->position }}</flux:text>
+                    <li class="grid grid-cols-[24px_1fr] gap-3" :key="$player->id">
+                        <div class="flex items-center">
+                            <flux:text size="sm">#{{ $player->number }}</flux:text>
+                        </div>
+                        <div>
+                            <flux:text size="lg" variant="strong">{{ $player->name }}</flux:text>
+                            <flux:text variant="subtle">{{ $player->position }}</flux:text>
+                        </div>
                     </li>
                 @endforeach
             </ul>
         </div>
     </div>
 
-    <flux:separator text="Highlights" variant="subtle" class="mt-9 mb-9" />
+    @if ($game->events->isNotEmpty())
+        <flux:separator text="Highlights" variant="subtle" class="mt-9 mb-9" />
 
-    <flux:timeline>
-        @foreach ($game->events as $event)
-            <flux:timeline.item>
-                @switch ($event->type)
-                    @case(GameEventType::Goal->value)
-                        <flux:timeline.indicator color="green">
-                            <flux:icon.check variant="micro" />
-                        </flux:timeline.indicator>
-                        @break
-
-                    @case(GameEventType::YellowCard->value)
-                        <flux:timeline.indicator color="yellow">
-                            <flux:icon.exclamation-triangle variant="micro" />
-                        </flux:timeline.indicator>
-                        @break
-
-                    @case(GameEventType::RedCard->value)
-                        <flux:timeline.indicator color="red">
-                            <flux:icon.x-mark variant="micro" />
-                        </flux:timeline.indicator>
-                        @break
-
-                    @case(GameEventType::Save->value)
-                        <flux:timeline.indicator>
-                            <flux:icon.no-symbol variant="micro" />
-                        </flux:timeline.indicator>
-                        @break
-                @endswitch
-
-                <flux:timeline.content>
+        <flux:timeline>
+            @foreach ($game->events as $event)
+                <flux:timeline.item>
                     @switch ($event->type)
                         @case(GameEventType::Goal->value)
-                            <flux:text>Goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            <flux:timeline.indicator color="green">
+                                <flux:icon.check variant="micro" />
+                            </flux:timeline.indicator>
                             @break
 
                         @case(GameEventType::YellowCard->value)
-                            <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            <flux:timeline.indicator color="yellow">
+                                <flux:icon.exclamation-triangle variant="micro" />
+                            </flux:timeline.indicator>
                             @break
 
                         @case(GameEventType::RedCard->value)
-                            <flux:text>Red card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            <flux:timeline.indicator color="red">
+                                <flux:icon.x-mark variant="micro" />
+                            </flux:timeline.indicator>
                             @break
 
                         @case(GameEventType::Save->value)
-                            <flux:text>Save by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                            <flux:timeline.indicator>
+                                <flux:icon.no-symbol variant="micro" />
+                            </flux:timeline.indicator>
                             @break
                     @endswitch
-                </flux:timeline.content>
-            </flux:timeline.item>
-        @endforeach
-    </flux:timeline>
+
+                    <flux:timeline.content>
+                        @switch ($event->type)
+                            @case(GameEventType::Goal->value)
+                                <flux:text>Goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::YellowCard->value)
+                                <flux:text>Yellow card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::RedCard->value)
+                                <flux:text>Red card given to {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::Save->value)
+                                <flux:text>Save by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                @break
+                        @endswitch
+                    </flux:timeline.content>
+                </flux:timeline.item>
+            @endforeach
+        </flux:timeline>
+    @endif
 
     <flux:separator text="Controls" variant="subtle" class="mt-9 mb-9" />
 
     <div>
         <flux:dropdown>
-            <flux:button icon:trailing="chevron-down">
+            <flux:button class="w-full mb-2" icon:trailing="chevron-down">
                 Goal
             </flux:button>
 
@@ -117,7 +127,7 @@
         </flux:dropdown>
 
         <flux:dropdown>
-            <flux:button icon:trailing="chevron-down">
+            <flux:button class="w-full mb-2" icon:trailing="chevron-down">
                 Yellow Card
             </flux:button>
 
@@ -137,7 +147,7 @@
         </flux:dropdown>
 
         <flux:dropdown>
-            <flux:button icon:trailing="chevron-down">
+            <flux:button class="w-full mb-2" icon:trailing="chevron-down">
                 Red Card
             </flux:button>
 
@@ -157,7 +167,7 @@
         </flux:dropdown>
 
         <flux:dropdown>
-            <flux:button icon:trailing="chevron-down">
+            <flux:button class="w-full mb-2" icon:trailing="chevron-down">
                 Save
             </flux:button>
 
@@ -177,7 +187,7 @@
         </flux:dropdown>
 
         <flux:modal.trigger name="end-match">
-            <flux:button variant="danger">End Match</flux:button>
+            <flux:button class="w-full" variant="danger">End Match</flux:button>
         </flux:modal.trigger>
 
         <flux:modal name="end-match" class="min-w-[22rem]">
