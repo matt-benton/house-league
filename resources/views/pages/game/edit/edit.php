@@ -18,7 +18,10 @@ new class extends Component
     {
         $this->authorize('update', $game);
 
-        $this->game = $game;
+        $this->game = $game->load([
+            'homeTeam.roster' => fn ($query) => $query->orderBy('position'),
+            'awayTeam.roster' => fn ($query) => $query->orderBy('position'),
+        ]);
 
         $this->gameEventTypes = GameEventType::cases();
     }

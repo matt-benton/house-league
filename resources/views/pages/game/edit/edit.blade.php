@@ -16,7 +16,7 @@
         <div class="space-y-2">
             <flux:text variant="subtle">{{ $game->homeTeam->name }}</flux:text>
             <ul class="space-y-1">
-                @foreach ($game->homeTeam->roster->sortBy('position') as $player)
+                @foreach ($game->homeTeam->roster as $player)
                     <li class="grid grid-cols-[24px_1fr] gap-3" :key="$player->id">
                         <div class="flex items-center">
                             <flux:text size="sm">#{{ $player->number }}</flux:text>
@@ -32,7 +32,7 @@
         <div class="space-y-2">
             <flux:text variant="subtle">{{ $game->awayTeam->name }}</flux:text>
             <ul class="space-y-2">
-                @foreach ($game->awayTeam->roster->sortBy('position') as $player)
+                @foreach ($game->awayTeam->roster as $player)
                     <li class="grid grid-cols-[24px_1fr] gap-3" :key="$player->id">
                         <div class="flex items-center">
                             <flux:text size="sm">#{{ $player->number }}</flux:text>
