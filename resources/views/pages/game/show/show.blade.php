@@ -118,16 +118,19 @@
             @endunless
         </flux:timeline>
     @else
-        <flux:callout icon="clock">
-            <flux:callout.heading>No highlights recorded</flux:callout.heading>
-
-            @unless ($game->is_complete)
+        @unless ($game->is_complete)
+            <flux:callout icon="clock">
+                <flux:callout.heading>No highlights recorded</flux:callout.heading>
                 <x-slot name="actions">
                     <flux:button variant="primary" href="/games/{{ $game->id }}/edit" wire:navigate>
                         Continue Match
                     </flux:button>
                 </x-slot>
-            @endunless
-        </flux:callout>
+            </flux:callout>
+        @else
+            <flux:callout icon="clock">
+                <flux:callout.heading>No highlights recorded</flux:callout.heading>
+            </flux:callout>
+        @endunless
     @endif
 </div>
