@@ -8,7 +8,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-new #[Title('Games')] class extends Component
+new #[Title('Matches')] class extends Component
 {
     use WithPagination;
 
