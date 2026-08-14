@@ -2,6 +2,7 @@
 
 use App\Models\Player;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -36,17 +37,26 @@ new #[Title('Players')] class extends Component
 
     public function setSortBy(string $field)
     {
-        $this->toggleSortDirection();
+        $this->toggleSortDirection($field);
 
         $this->sortBy = $field;
     }
 
-    private function toggleSortDirection()
+    private function toggleSortDirection($field)
     {
-        if ($this->sortDirection === 'asc') {
-            $this->sortDirection = 'desc';
+        if ($this->sortBy != $field) {
+            // the sortBy was changed
+            if (Str::contains($field, 'count')) {
+                $this->sortDirection = 'desc';
+            } else {
+                $this->sortDirection = 'asc';
+            }
         } else {
-            $this->sortDirection = 'asc';
+            if ($this->sortDirection === 'desc') {
+                $this->sortDirection = 'asc';
+            } else {
+                $this->sortDirection = 'desc';
+            }
         }
     }
 };
