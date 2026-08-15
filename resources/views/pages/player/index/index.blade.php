@@ -8,7 +8,7 @@
                     :direction="$sortDirection"
                     wire:click="setSortBy('name')"
                     sticky
-                    class="bg-zinc-800"
+                    class="bg-white dark:bg-zinc-800"
                 >
                     Name
                 </flux:table.column>
@@ -57,7 +57,7 @@
             @foreach ($this->players as $player)
                 <flux:table.rows wire:key="$player->id">
                     <flux:table.row>
-                        <flux:table.cell sticky class="bg-zinc-800">
+                        <flux:table.cell sticky class="bg-white dark:bg-zinc-800">
                             <flux:link variant="ghost" href="/players/{{ $player->id }}" wire:navigate>
                                 {{ $player->name }}
                             </flux:link>
