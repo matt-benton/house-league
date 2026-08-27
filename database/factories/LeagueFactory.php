@@ -18,7 +18,7 @@ class LeagueFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => ucfirst($this->faker->word),
         ];
     }
 }

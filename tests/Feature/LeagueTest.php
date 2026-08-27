@@ -25,3 +25,30 @@ test('it can show a league', function () {
         ->assertOk()
         ->assertSet('league', $league);
 });
+
+test('it can soft delete a league', function () {
+    $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
+
+    Livewire::test('pages::league.edit', ['league' => $league])
+        ->call('delete');
+
+    $league->refresh();
+
+    expect($league->deleted_at)->toBeTruthy();
+});
+
+test('it can restore a soft deleted league', function () {
+    $league = League::factory()
+        ->state(['deleted_at' => now()])
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::league.edit', ['league' => $league])
+        ->call('restore');
+
+    $league->refresh();
+
+    expect($league->deleted_at)->toBeNull();
+});

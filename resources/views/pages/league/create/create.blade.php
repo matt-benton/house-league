@@ -1,7 +1,6 @@
 
 <div>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="/leagues" wire:navigate>Leagues</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>New League</flux:breadcrumbs.item>
     </flux:breadcrumbs>
     <flux:card class="mt-9">
