@@ -8,7 +8,13 @@
     </flux:breadcrumbs>
     @unless ($league->trashed())
         <flux:card>
-            <flux:input wire:model="name" label="Name" />
+            <form wire:submit="save" class="space-y-5">
+                <flux:input wire:model="name" label="Name" />
+
+                <div class="flex justify-end">
+                    <flux:button variant="primary" type="submit">Save</flux:button>
+                </div>
+            </form>
         </flux:card>
         <flux:button variant="filled" icon="trash" wire:click="delete" class="mt-3">Delete League</flux:button>
     @else

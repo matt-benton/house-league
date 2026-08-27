@@ -52,3 +52,20 @@ test('it can restore a soft deleted league', function () {
 
     expect($league->deleted_at)->toBeNull();
 });
+
+test('it can rename a league', function () {
+    $league = League::factory()
+        ->state(['name' => 'My League'])
+        ->create();
+
+    $this->actingAs(User::factory()->admin()->make());
+
+    Livewire::test('pages::league.edit', ['league' => $league])
+        ->assertSet('name', 'My League')
+        ->set('name', 'Renamed League')
+        ->call('save');
+
+    $league->refresh();
+
+    expect($league->name)->toBe('Renamed League');
+});
