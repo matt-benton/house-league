@@ -1,3 +1,6 @@
+@php
+    $leagues = \App\Models\League::query()->orderBy('id')->get();
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
@@ -22,6 +25,14 @@
                         {{ __('Players') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+                <flux:navlist.group heading="Leagues" expandable :expanded="false">
+                    @foreach ($leagues as $league)
+                        <flux:navlist.item href="/leagues/{{ $league->id }}" wire:navigate>
+                            {{ $league->name }}
+                        </flux:navlist.item>
+                    @endforeach
+                    <flux:navlist.item icon="plus" href="/leagues/create" wire:navigate>New</flux:navlist.item>
+                </flux:navlist.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
