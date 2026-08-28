@@ -49,11 +49,14 @@ test('can create a team', function () {
 });
 
 test('it renders the show page', function () {
-    $team = Team::factory()->make();
+    $team = Team::factory()
+        ->for(League::factory())
+        ->make();
 
     Livewire::test('pages::team.show', ['team' => $team])
         ->assertSeeText($team->abbreviation)
-        ->assertSeeText($team->name);
+        ->assertSeeText($team->name)
+        ->assertSee($team->league->name);
 });
 
 test('it can edit a team', function () {
