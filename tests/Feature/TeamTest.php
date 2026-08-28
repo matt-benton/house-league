@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\League;
 use App\Models\Team;
 use App\Models\User;
 use Livewire\Livewire;
@@ -7,7 +8,14 @@ use Livewire\Livewire;
 beforeEach(function () {});
 
 test('list of teams is displayed', function () {
-    Team::factory()->count(3)->create();
+    $teams = Team::factory()
+        ->for(League::factory())
+        ->count(3)
+        ->create();
+
+    Team::factory()->for(League::factory())->create();
+
+    session()->put('league_id', $teams[0]->league_id);
 
     Livewire::test('pages::team.index')
         ->assertCount('teams', 3);

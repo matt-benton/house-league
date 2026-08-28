@@ -23,6 +23,8 @@ new class extends Component
         session()->put('league_id', $leagueId);
 
         $this->selectedLeague = $league;
+
+        $this->redirectRoute('dashboard', navigate: true);
     }
 };
 ?>

@@ -25,6 +25,7 @@ new #[Title('Teams')] class extends Component
     public function teams()
     {
         return Team::query()
+            ->where('league_id', session('league_id'))
             ->when($this->sortBy, fn (Builder $query) => $query->orderBy($this->sortBy, $this->sortDirection))
             ->paginate();
     }
