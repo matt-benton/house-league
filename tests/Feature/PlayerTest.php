@@ -1,16 +1,34 @@
 <?php
 
 use App\Enums\Position;
+use App\Models\League;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
 use Livewire\Livewire;
 
 test('it can display a list of players', function () {
-    Player::factory()->count(3)->create();
+    // players on no team
+    $noTeamPlayers = Player::factory()->count(3)->create();
+
+    $selectedLeague = League::factory()->create();
+    session()->put('league_id', $selectedLeague->id);
+    $anotherLeague = League::factory()->create();
+
+    // players on a team in selected league
+    $thisLeagueTeamPlayers = Player::factory()
+        ->count(7)
+        ->for(Team::factory()->for($selectedLeague))
+        ->create();
+
+    // players on a team in another league
+    $anotherLeagueTeamPlayers = Player::factory()
+        ->count(5)
+        ->for(Team::factory()->for($anotherLeague))
+        ->create();
 
     Livewire::test('pages::player.index')
-        ->assertCount('players', 3);
+        ->assertCount('players', 7); // players on a team in selected league should be visible
 });
 
 test('it can create a player', function () {

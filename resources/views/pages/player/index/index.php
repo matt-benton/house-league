@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\League;
 use App\Models\Player;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -16,9 +17,17 @@ new #[Title('Players')] class extends Component
 
     public string $sortDirection = 'asc';
 
+    public $selectedLeagueId;
+
+    public $leagues;
+
     public function mount()
     {
         $this->authorize('viewAny', Player::class);
+
+        $this->selectedLeagueId = session('league_id');
+
+        $this->leagues = League::all();
     }
 
     #[Computed]
@@ -28,11 +37,18 @@ new #[Title('Players')] class extends Component
             ->select(
                 'players.*',
                 'teams.name as team_name',
+                'teams.league_id',
             )
             ->leftJoin('teams', 'teams.id', '=', 'players.team_id')
             ->withCount('goals', 'saves', 'redCards', 'yellowCards')
             ->when($this->sortBy, fn (Builder $query) => $query->orderBy($this->sortBy, $this->sortDirection))
-            ->paginate();
+            ->when($this->leagues->pluck('id')->contains($this->selectedLeagueId), function (Builder $query) {
+                $query->where('teams.league_id', $this->selectedLeagueId);
+            })
+            ->when($this->selectedLeagueId == 0, function (Builder $query) {
+                $query->whereNull('teams.league_id');
+            })
+            ->paginate(30);
     }
 
     public function setSortBy(string $field)
