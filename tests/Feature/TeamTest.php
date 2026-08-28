@@ -27,9 +27,14 @@ test('can create a team', function () {
         ->admin()
         ->create();
 
+    $league = League::first();
+
+    session()->put('league_id', $league->id);
+
     $this->actingAs($user);
 
     Livewire::test('pages::team.create')
+        ->assertSet('league', $league)
         ->set('abbreviation', 'TST')
         ->set('name', 'Test')
         ->call('save');
@@ -40,6 +45,7 @@ test('can create a team', function () {
 
     expect($team->abbreviation)->toBe('TST');
     expect($team->name)->toBe('Test');
+    expect($team->league_id)->toBe($league->id);
 });
 
 test('it renders the show page', function () {
