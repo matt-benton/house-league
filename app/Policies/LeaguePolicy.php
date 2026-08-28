@@ -39,9 +39,15 @@ class LeaguePolicy
      */
     public function update(User $user, League $league): Response
     {
-        return $user->is_admin
-            ? Response::allow()
-            : Response::deny('Only an admin can perform this action');
+        if ($league->name === 'House League') {
+            return Response::deny('House League cannot be modified');
+        }
+
+        if ($user->is_admin) {
+            return Response::allow();
+        } else {
+            return Response::deny('Only an admin can perform this action');
+        }
     }
 
     /**
@@ -49,9 +55,15 @@ class LeaguePolicy
      */
     public function delete(User $user, League $league): Response
     {
-        return $user->is_admin
-            ? Response::allow()
-            : Response::deny('Only an admin can perform this action');
+        if ($league->name === 'House League') {
+            return Response::deny('House League cannot be modified');
+        }
+
+        if ($user->is_admin) {
+            return Response::allow();
+        } else {
+            return Response::deny('Only an admin can perform this action');
+        }
     }
 
     /**

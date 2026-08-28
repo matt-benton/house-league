@@ -7,15 +7,15 @@ use Livewire\Livewire;
 test('it can create a league', function () {
     $this->actingAs(User::factory()->admin()->make());
 
-    expect(League::count())->toBe(0);
+    expect(League::count())->toBe(1); // House League also exists so this will be the second league
 
     Livewire::test('pages::league.create')
         ->set('name', 'Test League')
         ->call('save');
 
-    expect(League::count())->toBe(1);
+    expect(League::count())->toBe(2);
 
-    expect(League::value('name'))->toBe('Test League');
+    expect(League::orderByDesc('id')->value('name'))->toBe('Test League');
 });
 
 test('it can show a league', function () {

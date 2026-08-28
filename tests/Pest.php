@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\League;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,7 +15,9 @@ use Tests\TestCase;
 |
 */
 
-pest()->extend(TestCase::class)
+pest()->extend(TestCase::class)->beforeEach(function () {
+    League::firstOrCreate(['name' => 'House League']);
+})
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
