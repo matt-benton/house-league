@@ -61,6 +61,7 @@ test('it renders the show page', function () {
 
 test('it can edit a team', function () {
     $team = Team::factory()
+        ->for(League::factory())
         ->state([
             'abbreviation' => 'TST',
             'name' => 'Test Team',
@@ -83,7 +84,7 @@ test('it can edit a team', function () {
 });
 
 test('it can soft delete a team', function () {
-    $team = Team::factory()->create();
+    $team = Team::factory()->for(League::factory())->create();
 
     $this->actingAs(User::factory()->admin()->make());
 
@@ -97,6 +98,7 @@ test('it can soft delete a team', function () {
 
 test('it can restore a soft deleted team', function () {
     $team = Team::factory()
+        ->for(League::factory())
         ->state(['deleted_at' => now()])
         ->create();
 

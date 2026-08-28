@@ -15,7 +15,10 @@ test('it can create a league', function () {
 
     expect(League::count())->toBe(2);
 
-    expect(League::orderByDesc('id')->value('name'))->toBe('Test League');
+    $newLeague = League::orderByDesc('id')->first();
+
+    expect($newLeague->name)->toBe('Test League');
+    expect(session('league_id'))->toBe($newLeague->id);
 });
 
 test('it can show a league', function () {

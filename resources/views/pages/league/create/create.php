@@ -24,8 +24,10 @@ new #[Title('New League')] class extends Component
 
         $league = League::create(['name' => $this->name]);
 
+        session()->put('league_id', $league->id);
+
         Flux::toast(variant: 'success', text: $this->name.' created successfully');
 
-        $this->redirect("/leagues/{$league->id}", navigate: true);
+        $this->redirectRoute('dashboard', navigate: true);
     }
 };
