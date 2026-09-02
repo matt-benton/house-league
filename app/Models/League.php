@@ -21,4 +21,9 @@ class League extends Model
     {
         return $this->hasMany(Team::class);
     }
+
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
 }

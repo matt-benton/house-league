@@ -3,6 +3,7 @@
 use App\Enums\GameEventType;
 use App\Models\Game;
 use App\Models\GameEvent;
+use App\Models\League;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\User;
@@ -10,13 +11,17 @@ use Livewire\Livewire;
 
 test('it displays a list of games', function () {
     $teams = Team::factory()->count(4)->create();
+    $league = League::factory()->create();
+    session()->put('league_id', $league->id);
 
     Game::factory()
+        ->for($league)
         ->for($teams[0], 'homeTeam')
         ->for($teams[1], 'awayTeam')
         ->create();
 
     Game::factory()
+        ->for($league)
         ->for($teams[2], 'homeTeam')
         ->for($teams[3], 'awayTeam')
         ->create();
@@ -31,13 +36,17 @@ test('it displays a list of games', function () {
 });
 
 test('it displays a game with its teams and score', function () {
+    $league = League::factory()->create();
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
     $away = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -64,16 +73,21 @@ test('it displays a game with its teams and score', function () {
 test('it can delete a game with events', function () {
     $this->actingAs(User::factory()->admin()->make());
 
+    $league = League::factory()->create();
+
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->state(['wins' => 1])
         ->create();
     $away = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->state(['losses' => 1])
         ->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->has(GameEvent::factory()
@@ -93,10 +107,14 @@ test('it can delete a game with events', function () {
 });
 
 test('it can create a game', function () {
+    $league = League::factory()->create();
+
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
     $away = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
 
@@ -114,13 +132,16 @@ test('it can create a game', function () {
 
 test('a player can score a goal', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
     $away = Team::factory()->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -146,13 +167,16 @@ test('a player can score a goal', function () {
 
 test('a player can receive a yellow card', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
     $away = Team::factory()->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -176,13 +200,16 @@ test('a player can receive a yellow card', function () {
 
 test('a player can receive a red card', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
     $away = Team::factory()->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -206,13 +233,18 @@ test('a player can receive a red card', function () {
 
 test('a player can make a save', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
     $home = Team::factory()
+        ->for($league)
         ->has(Player::factory(), 'roster')
         ->create();
-    $away = Team::factory()->create();
+    $away = Team::factory()
+        ->for($league)
+        ->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -236,11 +268,13 @@ test('a player can make a save', function () {
 
 test('it can end a match', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
-    $home = Team::factory()->create();
-    $away = Team::factory()->create();
+    $home = Team::factory()->for($league)->create();
+    $away = Team::factory()->for($league)->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -253,15 +287,17 @@ test('it can end a match', function () {
 
 test('a team can win a match', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
-    $home = Team::factory()->create();
-    $away = Team::factory()->create();
+    $home = Team::factory()->for($league)->create();
+    $away = Team::factory()->for($league)->create();
 
     $player = Player::factory()
         ->for($home)
         ->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();
@@ -281,9 +317,10 @@ test('a team can win a match', function () {
 
 test('teams can draw a match', function () {
     $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
 
-    $home = Team::factory()->create();
-    $away = Team::factory()->create();
+    $home = Team::factory()->for($league)->create();
+    $away = Team::factory()->for($league)->create();
 
     $homePlayer = Player::factory()
         ->for($home)
@@ -294,6 +331,7 @@ test('teams can draw a match', function () {
         ->create();
 
     $game = Game::factory()
+        ->for($league)
         ->for($home, 'homeTeam')
         ->for($away, 'awayTeam')
         ->create();

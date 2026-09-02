@@ -48,4 +48,9 @@ class Game extends Model
         return $this->hasMany(GameEvent::class)
             ->where('type', GameEventType::Goal->value);
     }
+
+    public function league(): BelongsTo
+    {
+        return $this->belongsTo(League::class);
+    }
 }

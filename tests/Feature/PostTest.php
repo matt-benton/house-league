@@ -1,11 +1,16 @@
 <?php
 
+use App\Models\League;
 use App\Models\Post;
 use App\Models\User;
 use Livewire\Livewire;
 
 test('it can see a list of posts', function () {
+    $league = League::factory()->create();
+    session()->put('league_id', $league->id);
+
     Post::factory()
+        ->for($league)
         ->state(['title' => 'This is a new post'])
         ->for(User::factory(), 'author')
         ->create();
@@ -15,6 +20,8 @@ test('it can see a list of posts', function () {
 });
 
 test('it can create a post', function () {
+    $league = League::factory()->create();
+    session()->put('league_id', $league->id);
     expect(Post::count())->toBe(0);
 
     $user = User::factory()->admin()->create();
@@ -37,8 +44,8 @@ test('it can create a post', function () {
 
 test('it can show a post', function () {
     $author = User::factory()->admin()->create();
-
     $post = Post::factory()
+        ->for(League::factory())
         ->for($author, 'author')
         ->state([
             'title' => 'Test post',
@@ -53,6 +60,7 @@ test('it can show a post', function () {
 
 test('it can delete a post', function () {
     $post = Post::factory()
+        ->for(League::factory())
         ->for(User::factory()->admin(), 'author')
         ->create();
 
@@ -66,6 +74,7 @@ test('it can delete a post', function () {
 
 test('it can edit a post', function () {
     $post = Post::factory()
+        ->for(League::factory())
         ->for(User::factory()->admin(), 'author')
         ->state([
             'title' => 'Test Title for Edit',

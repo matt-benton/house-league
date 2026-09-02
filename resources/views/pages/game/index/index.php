@@ -22,6 +22,7 @@ new #[Title('Matches')] class extends Component
     public function games(): LengthAwarePaginator
     {
         return Game::query()
+            ->where('league_id', session('league_id'))
             ->with(['homeTeam', 'awayTeam', 'goals'])
             ->latest()
             ->paginate(50);
