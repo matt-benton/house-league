@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Enums\GameEventType;
-use App\Models\Game;
 use App\Models\GameEvent;
 use App\Models\Player;
 use App\Models\Scopes\OrderByNameScope;
@@ -61,7 +60,7 @@ class SimulateGames extends Command
 
                 $homeTeam = $teams->first();
                 $awayTeam = $teams->last();
-                $game = Game::create([
+                $game = $homeTeam->league->games()->create([
                     'home_team_id' => $homeTeam->id,
                     'away_team_id' => $awayTeam->id,
                 ]);
