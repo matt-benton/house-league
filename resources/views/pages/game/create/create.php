@@ -17,7 +17,7 @@ new #[Title('New Match')] class extends Component
     {
         $this->authorize('create', Game::class);
 
-        $this->teams = Team::all();
+        $this->teams = Team::query()->where('league_id', session('league_id'))->get();
     }
 
     public function save()
