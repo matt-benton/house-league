@@ -32,8 +32,12 @@
                 <flux:label>Team</flux:label>
                 <flux:select wire:model="teamId">
                     <flux:select.option value="">None</flux:select.option>
-                    @foreach ($teams as $team)
-                        <flux:select.option value="{{ $team->id }}">{{ $team->name }}</flux:select.option>
+                    @foreach ($leagues as $league)
+                        <flux:select.group label="{{ $league->name }}">
+                            @foreach ($league->teams as $team)
+                                <flux:select.option value="{{ $team->id }}">{{ $team->name }}</flux:select.option>
+                            @endforeach
+                        </flux:select.group>
                     @endforeach
                 </flux:select>
                 <flux:error name="teamId" />
