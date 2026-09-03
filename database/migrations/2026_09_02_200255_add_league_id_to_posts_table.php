@@ -24,7 +24,7 @@ return new class extends Migration
 
         // make the column nullable and add the foreign constraint
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('league_id')->change();
+            $table->foreignId('league_id')->change();
 
             $table->foreign('league_id')->references('id')->on('leagues');
         });
