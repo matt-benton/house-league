@@ -20,6 +20,9 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return BelongsTo<League, $this>
+     */
     public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);

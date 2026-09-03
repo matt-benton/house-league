@@ -17,11 +17,17 @@ class League extends Model
 
     use SoftDeletes;
 
+    /**
+     * @return HasMany<Team, $this>
+     */
     public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
 
+    /**
+     * @return HasMany<Game, $this>
+     */
     public function games(): HasMany
     {
         return $this->hasMany(Game::class);

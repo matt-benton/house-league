@@ -40,6 +40,9 @@ class Team extends Model
         return $this->hasMany(Player::class)->orderBy('position');
     }
 
+    /**
+     * @return BelongsTo<League, $this>
+     */
     public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);
