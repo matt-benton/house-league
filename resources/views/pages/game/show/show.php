@@ -66,26 +66,43 @@ new class extends Component
         if ($this->homeScore > $this->awayScore) {
             $winningTeam = $this->game->homeTeam;
             $winningTeam->wins--;
-            $winningTeam->save();
+
+            if ($winningTeam->wins >= 0) {
+                $winningTeam->save();
+            }
 
             $losingTeam = $this->game->awayTeam;
             $losingTeam->losses--;
-            $losingTeam->save();
+
+            if ($losingTeam->losses >= 0) {
+                $losingTeam->save();
+            }
         } elseif ($this->awayScore > $this->homeScore) {
             $winningTeam = $this->game->awayTeam;
             $winningTeam->wins--;
-            $winningTeam->save();
+            if ($winningTeam->wins >= 0) {
+                $winningTeam->save();
+            }
 
             $losingTeam = $this->game->homeTeam;
             $losingTeam->losses--;
-            $losingTeam->save();
+            if ($losingTeam->losses >= 0) {
+                $losingTeam->save();
+            }
         } else {
             $homeTeam = $this->game->homeTeam;
             $homeTeam->draws--;
-            $homeTeam->save();
+
+            if ($homeTeam->draws >= 0) {
+                $homeTeam->save();
+            }
+
             $awayTeam = $this->game->awayTeam;
             $awayTeam->draws--;
-            $awayTeam->save();
+
+            if ($awayTeam->draws >= 0) {
+                $awayTeam->save();
+            }
         }
     }
 };
