@@ -57,7 +57,7 @@
     @else
         <flux:callout icon="clock" color="lime">
             <flux:callout.heading>Stay tuned</flux:callout.heading>
-            <flux:callout.text>Check back soon for news about House League!</flux:callout.text>
+            <flux:callout.text>Check back soon for news about {{ $league->name }}!</flux:callout.text>
         </flux:callout>
     @endif
 </div>

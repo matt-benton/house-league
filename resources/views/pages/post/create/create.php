@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\League;
 use App\Models\Post;
 use Flux\Flux;
 use Livewire\Attributes\Title;
@@ -11,6 +12,13 @@ new #[Title('New Post')] class extends Component
 
     public string $text;
 
+    public League $league;
+
+    public function mount()
+    {
+        $this->league = League::find(session('league_id'));
+    }
+
     public function publish()
     {
         $this->authorize('create', Post::class);
@@ -21,6 +29,7 @@ new #[Title('New Post')] class extends Component
         $post->title = $this->title;
         $post->text = $this->text;
         $post->user_id = auth()->id();
+        $post->league_id = $this->league->id;
         $post->save();
 
         Flux::toast(

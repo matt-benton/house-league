@@ -14,6 +14,10 @@
                 <flux:error name="abbreviation" />
             </flux:field>
 
+            <flux:callout color="amber" icon="exclamation-triangle">
+                <flux:text>Team will be added to {{ $league->name }}</flux:text>
+            </flux:callout>
+
             <div class="flex justify-end">
                 <flux:button variant="primary" type="submit">Save</flux:button>
             </div>

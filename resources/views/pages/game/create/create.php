@@ -17,14 +17,15 @@ new #[Title('New Match')] class extends Component
     {
         $this->authorize('create', Game::class);
 
-        $this->teams = Team::all();
+        $this->teams = Team::query()->where('league_id', session('league_id'))->get();
     }
 
     public function save()
     {
         $validated = $this->validate();
 
-        $game = Game::create([
+        $homeTeam = Team::find($validated['home_team_id']);
+        $game = $homeTeam->league->games()->create([
             'home_team_id' => $validated['home_team_id'],
             'away_team_id' => $validated['away_team_id'],
         ]);

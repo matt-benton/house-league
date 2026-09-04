@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\League;
 use App\Models\Team;
 use App\Models\User;
 use Livewire\Livewire;
@@ -7,7 +8,14 @@ use Livewire\Livewire;
 beforeEach(function () {});
 
 test('list of teams is displayed', function () {
-    Team::factory()->count(3)->create();
+    $teams = Team::factory()
+        ->for(League::factory())
+        ->count(3)
+        ->create();
+
+    Team::factory()->for(League::factory())->create();
+
+    session()->put('league_id', $teams[0]->league_id);
 
     Livewire::test('pages::team.index')
         ->assertCount('teams', 3);
@@ -19,9 +27,14 @@ test('can create a team', function () {
         ->admin()
         ->create();
 
+    $league = League::first();
+
+    session()->put('league_id', $league->id);
+
     $this->actingAs($user);
 
     Livewire::test('pages::team.create')
+        ->assertSet('league', $league)
         ->set('abbreviation', 'TST')
         ->set('name', 'Test')
         ->call('save');
@@ -32,18 +45,23 @@ test('can create a team', function () {
 
     expect($team->abbreviation)->toBe('TST');
     expect($team->name)->toBe('Test');
+    expect($team->league_id)->toBe($league->id);
 });
 
 test('it renders the show page', function () {
-    $team = Team::factory()->make();
+    $team = Team::factory()
+        ->for(League::factory())
+        ->make();
 
     Livewire::test('pages::team.show', ['team' => $team])
         ->assertSeeText($team->abbreviation)
-        ->assertSeeText($team->name);
+        ->assertSeeText($team->name)
+        ->assertSee($team->league->name);
 });
 
 test('it can edit a team', function () {
     $team = Team::factory()
+        ->for(League::factory())
         ->state([
             'abbreviation' => 'TST',
             'name' => 'Test Team',
@@ -66,7 +84,7 @@ test('it can edit a team', function () {
 });
 
 test('it can soft delete a team', function () {
-    $team = Team::factory()->create();
+    $team = Team::factory()->for(League::factory())->create();
 
     $this->actingAs(User::factory()->admin()->make());
 
@@ -80,6 +98,7 @@ test('it can soft delete a team', function () {
 
 test('it can restore a soft deleted team', function () {
     $team = Team::factory()
+        ->for(League::factory())
         ->state(['deleted_at' => now()])
         ->create();
 

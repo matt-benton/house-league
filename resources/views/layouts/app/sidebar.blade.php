@@ -12,6 +12,8 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('League')" class="grid">
+                    <livewire:league-picker />
+
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>

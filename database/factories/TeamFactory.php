@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\League;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,6 +21,7 @@ class TeamFactory extends Factory
         return [
             'abbreviation' => $this->faker->randomLetter().$this->faker->randomLetter().$this->faker->randomLetter(),
             'name' => ucfirst($this->faker->word()),
+            'league_id' => League::value('id'),
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\League;
 use App\Models\Team;
 use Flux\Flux;
 use Livewire\Attributes\Validate;
@@ -13,16 +14,20 @@ new class extends Component
     #[Validate('required|max:45|unique:teams,name')]
     public string $name;
 
+    public League $league;
+
     public function mount()
     {
         $this->authorize('create', Team::class);
+
+        $this->league = League::find(session('league_id'));
     }
 
     public function save()
     {
         $this->validate();
 
-        Team::create([
+        $this->league->teams()->create([
             'abbreviation' => $this->abbreviation,
             'name' => $this->name,
         ]);

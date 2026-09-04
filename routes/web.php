@@ -21,11 +21,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::livewire('/games/create', 'pages::game.create')->name('games.create');
     Route::livewire('/games/{game}/edit', 'pages::game.edit')->name('games.edit');
+
+    Route::livewire('/leagues/create', 'pages::league.create')->name('leagues.create');
+    Route::livewire('/leagues/{league}/edit', 'pages::league.edit')->name('leagues.edit')->withTrashed();
 });
 
 Route::livewire('/teams/{team}', 'pages::team.show')->name('teams.show')->withTrashed();
 Route::livewire('/players/{player}', 'pages::player.show')->name('players.show')->withTrashed();
 Route::livewire('/posts/{post}', 'pages::post.show')->name('posts.show');
 Route::livewire('/games/{game}', 'pages::game.show')->name('games.show');
+Route::livewire('/leagues/{league}', 'pages::league.show')->name('leagues.show')->withTrashed();
 
 require __DIR__.'/settings.php';

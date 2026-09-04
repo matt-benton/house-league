@@ -4,7 +4,8 @@
         <flux:breadcrumbs.item>{{ $team->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
     <flux:card class="mt-7">
-        <flux:heading size="lg" class="mb-3">{{ $team->abbreviation }} - {{ $team->name }}</flux:heading>
+        <flux:heading size="lg">{{ $team->abbreviation }} - {{ $team->name }}</flux:heading>
+        <flux:text size="sm" class="mb-3" color="indigo" variant="subtle">{{ $team->league->name }}</flux:text>
         <flux:heading>Wins: {{ $team->wins }} | Losses: {{ $team->losses }} | Draws: {{ $team->draws }}</flux:heading>
         <flux:button href="/teams/{{ $team->id }}/edit" icon="cog-6-tooth" class="mt-5" wire:navigate>Manage</flux:button>
         <flux:heading class="mb-5 mt-7">Roster</flux:heading>

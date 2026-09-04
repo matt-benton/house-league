@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\Position;
+use App\Models\League;
 use App\Models\Player;
-use App\Models\Team;
 use Flux\Flux;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -21,7 +21,7 @@ new class extends Component
 
     public $teamId;
 
-    public $teams;
+    public $leagues;
 
     public function mount(Player $player)
     {
@@ -37,7 +37,7 @@ new class extends Component
         $this->positions = Position::values();
 
         $this->teamId = $player->team_id;
-        $this->teams = Team::all();
+        $this->leagues = League::query()->with('teams')->get();
     }
 
     public function save()

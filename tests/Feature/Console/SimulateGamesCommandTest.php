@@ -22,6 +22,7 @@ test('it simulates a complete game and fills short rosters', function () {
     expect([$game->home_team_id, $game->away_team_id])
         ->toContain($shortRosterTeam->id, $fullRosterTeam->id)
         ->and($game->home_team_id)->not->toBe($game->away_team_id)
+        ->and($game->league_id)->toBe($game->homeTeam->league_id)
         ->and($game->is_complete)->toBeTruthy()
         ->and($shortRosterTeam->roster()->count())->toBe(11)
         ->and($fullRosterTeam->roster()->count())->toBe(12)
