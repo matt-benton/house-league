@@ -41,6 +41,14 @@
                     </flux:table.column>
                     <flux:table.column
                         sortable
+                        :sorted="$sortBy === 'assists_count'"
+                        :direction="$sortDirection"
+                        wire:click="setSortBy('assists_count')"
+                    >
+                        Assists
+                    </flux:table.column>
+                    <flux:table.column
+                        sortable
                         :sorted="$sortBy === 'saves_count'"
                         :direction="$sortDirection"
                         wire:click="setSortBy('saves_count')"
@@ -75,6 +83,7 @@
                             </flux:table.cell>
                             <flux:table.cell>{{ $player->team_name }}</flux:table.cell>
                             <flux:table.cell>{{ $player->goals_count }}</flux:table.cell>
+                            <flux:table.cell>{{ $player->assists_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->saves_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->yellow_cards_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->red_cards_count }}</flux:table.cell>

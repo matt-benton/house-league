@@ -69,4 +69,9 @@ class Player extends Model
     {
         return $this->hasMany(GameEvent::class)->where('type', GameEventType::RedCard);
     }
+
+    public function assists(): HasMany
+    {
+        return $this->hasMany(SecondaryEvent::class)->where('type', 'assist');
+    }
 }

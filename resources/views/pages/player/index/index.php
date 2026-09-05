@@ -40,7 +40,13 @@ new #[Title('Players')] class extends Component
                 'teams.league_id',
             )
             ->leftJoin('teams', 'teams.id', '=', 'players.team_id')
-            ->withCount('goals', 'saves', 'redCards', 'yellowCards')
+            ->withCount(
+                'goals',
+                'saves',
+                'redCards',
+                'yellowCards',
+                'assists',
+            )
             ->when($this->sortBy, fn (Builder $query) => $query->orderBy($this->sortBy, $this->sortDirection))
             ->when($this->leagues->pluck('id')->contains($this->selectedLeagueId), function (Builder $query) {
                 $query->where('teams.league_id', $this->selectedLeagueId);
