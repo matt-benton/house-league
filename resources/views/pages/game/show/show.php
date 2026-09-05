@@ -15,7 +15,7 @@ new class extends Component
     {
         $this->authorize('view', $game);
 
-        $game->load(['homeTeam', 'awayTeam', 'events.player', 'events.team']);
+        $game->load(['homeTeam', 'awayTeam', 'events.player', 'events.team', 'events.secondaryEvent']);
         $game->setRelation('events', $game->events->sortBy('id')->values());
 
         $this->game = $game;

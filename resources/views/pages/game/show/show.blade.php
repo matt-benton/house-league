@@ -83,6 +83,9 @@
                         @switch ($event->type)
                             @case(GameEventType::Goal->value)
                                 <flux:text>Goal by {{ $event->player->name }} ({{ $event->team->abbreviation }})</flux:text>
+                                @if ($event->secondaryEvent)
+                                    <flux:text size="sm" class="mt-1">Assist by {{ $event->secondaryEvent->player->name }}</flux:text>
+                                @endif
                                 @break
 
                             @case(GameEventType::YellowCard->value)
