@@ -4,8 +4,10 @@ use App\Enums\GameEventType;
 use App\Models\Game;
 use App\Models\GameEvent;
 use App\Models\Player;
+use App\Models\SecondaryEvent;
 use Flux\Flux;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new class extends Component
@@ -13,6 +15,12 @@ new class extends Component
     public Game $game;
 
     public array $gameEventTypes;
+
+    #[Validate('required|exists:players,id', as: 'goal scorer')]
+    public $goalScorerId;
+
+    #[Validate('nullable|exists:players,id', as: 'provider')]
+    public $assisterId;
 
     public function mount(Game $game)
     {
@@ -29,7 +37,7 @@ new class extends Component
     #[Computed]
     public function events()
     {
-        return $this->game->events()->get();
+        return $this->game->events()->with('secondaryEvent.player')->get();
     }
 
     public function render()
@@ -38,21 +46,38 @@ new class extends Component
             ->title($this->game->homeTeam->abbreviation.' vs '.$this->game->awayTeam->abbreviation);
     }
 
-    public function scoreGoal($playerId)
+    public function scoreGoal()
     {
-        $player = Player::find($playerId);
+        $this->validate();
+
+        $goalScorer = Player::find($this->goalScorerId);
 
         $goal = new GameEvent;
         $goal->type = GameEventType::Goal;
-        $goal->player_id = $player->id;
-        $goal->team_id = $player->team_id;
+        $goal->player_id = $goalScorer->id;
+        $goal->team_id = $goalScorer->team_id;
         $goal->game_id = $this->game->id;
         $goal->save();
 
+        if ($this->assisterId) {
+            $assist = new SecondaryEvent;
+            $assist->player_id = $this->assisterId;
+            $assist->type = 'assist';
+            $goal->secondaryEvent()->save($assist);
+            $assistMessage = " Assisted by {$assist->player->name}.";
+        } else {
+            $assistMessage = '';
+        }
+
+        Flux::modal('goal-modal')->close();
+
         Flux::toast(
             variant: 'success',
-            text: "Goooooaallll!!!! {$player->name} has scored!",
+            text: "Goooooaallll!!!! {$goalScorer->name} has scored!".$assistMessage,
         );
+
+        $this->reset('goalScorerId');
+        $this->reset('assisterId');
     }
 
     public function giveYellowCard($playerId)

@@ -6,6 +6,7 @@ use Database\Factories\GameEventFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class GameEvent extends Model
 {
@@ -26,5 +27,13 @@ class GameEvent extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    /**
+     * @return HasOne<SecondaryEvent, $this>
+     */
+    public function secondaryEvent(): HasOne
+    {
+        return $this->hasOne(SecondaryEvent::class);
     }
 }

@@ -5,6 +5,7 @@ use App\Models\Game;
 use App\Models\GameEvent;
 use App\Models\League;
 use App\Models\Player;
+use App\Models\SecondaryEvent;
 use App\Models\Team;
 use App\Models\User;
 use Livewire\Livewire;
@@ -136,7 +137,7 @@ test('a player can score a goal', function () {
 
     $home = Team::factory()
         ->for($league)
-        ->has(Player::factory(), 'roster')
+        ->has(Player::factory()->count(2), 'roster')
         ->create();
     $away = Team::factory()->create();
 
@@ -146,20 +147,24 @@ test('a player can score a goal', function () {
         ->for($away, 'awayTeam')
         ->create();
 
-    $player = $home->roster[0];
+    $scorer = $home->roster[0];
+    $provider = $home->roster[1];
 
     expect(GameEvent::count())->toBe(0);
 
     Livewire::test('pages::game.edit', ['game' => $game])
-        ->call('scoreGoal', $player->id)
+        ->set('goalScorerId', $scorer->id)
+        ->set('assisterId', $provider->id)
+        ->call('scoreGoal', $scorer->id)
         ->assertSet('homeScore', 1)
         ->assertSet('awayScore', 0);
 
     expect(GameEvent::count())->toBe(1);
+    expect(SecondaryEvent::count())->toBe(1);
 
     $goal = GameEvent::first();
 
-    expect($goal->player_id)->toBe($player->id);
+    expect($goal->player_id)->toBe($scorer->id);
     expect($goal->team_id)->toBe($home->id);
     expect($goal->game_id)->toBe($game->id);
     expect($goal->type)->toBe('goal');
@@ -303,6 +308,7 @@ test('a team can win a match', function () {
         ->create();
 
     Livewire::test('pages::game.edit', ['game' => $game])
+        ->set('goalScorerId', $player->id)
         ->call('scoreGoal', $player->id)
         ->call('endGame');
 
