@@ -2,11 +2,10 @@
     <flux:heading size="lg" class="mb-3">Players</flux:heading>
         <flux:field class="max-w-xs mb-3 mt-7">
             <flux:label>Filter</flux:label>
-            <flux:select size="sm" wire:model.live="selectedLeagueId" placeholder="Filter...">
-                <flux:select.option value="">Show All</flux:select.option>
+            <flux:select size="sm" wire:model.live="selectedTeamId" placeholder="Filter...">
                 <flux:select.option value="0">No Team</flux:select.option>
-                @foreach ($leagues as $league)
-                    <flux:select.option value="{{ $league->id }}">{{ $league->name }}</flux:select.option>
+                @foreach ($teams as $team)
+                    <flux:select.option value="{{ $team->id }}">{{ $team->name }}</flux:select.option>
                 @endforeach
             </flux:select>
         </flux:field>

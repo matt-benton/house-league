@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\League;
 use App\Models\Player;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
@@ -19,7 +19,9 @@ new #[Title('Players')] class extends Component
 
     public $selectedLeagueId;
 
-    public $leagues;
+    public $selectedTeamId;
+
+    public $teams;
 
     public function mount()
     {
@@ -27,7 +29,9 @@ new #[Title('Players')] class extends Component
 
         $this->selectedLeagueId = session('league_id');
 
-        $this->leagues = League::all();
+        $this->teams = Team::query()->where('league_id', $this->selectedLeagueId)->get();
+
+        $this->selectedTeamId = '';
     }
 
     #[Computed]
@@ -48,12 +52,13 @@ new #[Title('Players')] class extends Component
                 'assists',
             )
             ->when($this->sortBy, fn (Builder $query) => $query->orderBy($this->sortBy, $this->sortDirection))
-            ->when($this->leagues->pluck('id')->contains($this->selectedLeagueId), function (Builder $query) {
-                $query->where('teams.league_id', $this->selectedLeagueId);
+            ->when($this->selectedTeamId, function (Builder $query) {
+                $query->where('players.team_id', $this->selectedTeamId);
             })
-            ->when($this->selectedLeagueId == 0, function (Builder $query) {
-                $query->whereNull('teams.league_id');
-            })
+            ->when($this->selectedTeamId == 0,
+                fn (Builder $query) => $query->whereNull('players.team_id'),
+                fn (Builder $query) => $query->where('league_id', $this->selectedLeagueId),
+            )
             ->paginate(30);
     }
 
