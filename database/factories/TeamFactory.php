@@ -20,7 +20,7 @@ class TeamFactory extends Factory
     {
         return [
             'abbreviation' => $this->faker->randomLetter().$this->faker->randomLetter().$this->faker->randomLetter(),
-            'name' => ucfirst($this->faker->word()),
+            'name' => 'Team '.$this->faker->numberBetween(1, 999999),
             'league_id' => League::value('id'),
         ];
     }
