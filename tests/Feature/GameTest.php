@@ -155,9 +155,7 @@ test('a player can score a goal', function () {
     Livewire::test('pages::game.edit', ['game' => $game])
         ->set('goalScorerId', $scorer->id)
         ->set('assisterId', $provider->id)
-        ->call('scoreGoal', $scorer->id)
-        ->assertSet('homeScore', 1)
-        ->assertSet('awayScore', 0);
+        ->call('scoreGoal', $scorer->id);
 
     expect(GameEvent::count())->toBe(1);
     expect(SecondaryEvent::count())->toBe(1);
@@ -168,6 +166,8 @@ test('a player can score a goal', function () {
     expect($goal->team_id)->toBe($home->id);
     expect($goal->game_id)->toBe($game->id);
     expect($goal->type)->toBe('goal');
+    expect($game->fresh()->homeScore)->toBe(1);
+    expect($game->fresh()->awayScore)->toBe(0);
 });
 
 test('a player can receive a yellow card', function () {
@@ -269,6 +269,44 @@ test('a player can make a save', function () {
     expect($save->team_id)->toBe($home->id);
     expect($save->game_id)->toBe($game->id);
     expect($save->type)->toBe('save');
+});
+
+test('a player can score an own goal', function () {
+    $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
+
+    $home = Team::factory()
+        ->for($league)
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()
+        ->for($league)
+        ->create();
+
+    $homePlayer = $home->roster[0];
+
+    $game = Game::factory()
+        ->for($league)
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    expect(GameEvent::count())->toBe(0);
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->call('ownGoal', $homePlayer->id);
+
+    expect(GameEvent::count())->toBe(1);
+
+    $ownGoal = GameEvent::first();
+
+    expect($ownGoal->player_id)->toBe($homePlayer->id);
+    expect($ownGoal->team_id)->toBe($homePlayer->id);
+    expect($ownGoal->game_id)->toBe($game->id);
+    expect($ownGoal->type)->toBe('own goal');
+
+    expect($game->fresh()->awayScore)->toBe(1);
+    expect($game->fresh()->homeScore)->toBe(0);
 });
 
 test('it can end a match', function () {

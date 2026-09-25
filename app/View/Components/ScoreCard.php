@@ -22,13 +22,6 @@ class ScoreCard extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.score-card', [
-            'homeScore' => $this->match->goals->filter(
-                fn ($goal) => $goal->team_id === $this->match->home_team_id
-            )->count(),
-            'awayScore' => $this->match->goals->filter(
-                fn ($goal) => $goal->team_id === $this->match->away_team_id
-            )->count(),
-        ]);
+        return view('components.score-card');
     }
 }

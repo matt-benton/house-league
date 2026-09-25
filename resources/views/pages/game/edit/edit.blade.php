@@ -3,11 +3,11 @@
     <flux:badge color="red" class="mb-2" variant="solid">Live</flux:badge>
     <div class="flex justify-between mb-5">
         <flux:heading size="xl">{{ $game->homeTeam->name }}</flux:heading>
-        <flux:heading size="xl">{{ $this->homeScore }}</flux:heading>
+        <flux:heading size="xl">{{ $this->game->homeScore }}</flux:heading>
     </div>
     <div class="flex justify-between">
         <flux:heading size="xl">{{ $game->awayTeam->name }}</flux:heading>
-        <flux:heading size="xl">{{ $this->awayScore }}</flux:heading>
+        <flux:heading size="xl">{{ $this->game->awayScore }}</flux:heading>
     </div>
 
     <flux:separator text="Players" variant="subtle" class="mt-9 mb-9" />
@@ -77,6 +77,12 @@
                                 <flux:icon.no-symbol variant="micro" />
                             </flux:timeline.indicator>
                             @break
+
+                        @case(GameEventType::OwnGoal->value)
+                            <flux:timeline.indicator color="red">
+                                <flux:icon.x-circle variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
                     @endswitch
 
                     <flux:timeline.content>
@@ -112,6 +118,13 @@
                             @case(GameEventType::Save->value)
                                 <div class="flex items-center justify-between">
                                     <flux:text>Save by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                    <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
+                                </div>
+                                @break
+
+                            @case(GameEventType::OwnGoal->value)
+                                <div class="flex items-center justify-between">
+                                    <flux:text>Own goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
                                     <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
                                 </div>
                                 @break
@@ -239,6 +252,28 @@
                 </flux:menu.submenu>
             </flux:menu>
         </flux:dropdown>
+
+        <flux:dropdown>
+            <flux:button class="w-full mb-2" icon:trailing="chevron-down">
+                Own Goal
+            </flux:button>
+
+            <flux:menu>
+                <flux:menu.submenu heading="{{ $game->homeTeam->abbreviation }}">
+                    @foreach ($game->homeTeam->roster as $homePlayer)
+                        <flux:menu.item wire:click="ownGoal({{ $homePlayer->id }})">{{ $homePlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+
+                <flux:menu.submenu heading="{{ $game->awayTeam->abbreviation }}">
+                    @foreach ($game->awayTeam->roster as $awayPlayer)
+                        <flux:menu.item wire:click="ownGoal({{ $awayPlayer->id }})">{{ $awayPlayer->name }}</flux:menu.item>
+                    @endforeach
+                </flux:menu.submenu>
+            </flux:menu>
+        </flux:dropdown>
+
+        <flux:separator variant="subtle" class="mt-9 mb-9" />
 
         <flux:modal.trigger name="end-match">
             <flux:button class="w-full" variant="danger">End Match</flux:button>

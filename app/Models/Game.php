@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GameEventType;
 use Database\Factories\GameFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,10 +51,41 @@ class Game extends Model
     }
 
     /**
+     * @return HasMany<GameEvent, $this>
+     */
+    public function ownGoals(): HasMany
+    {
+        return $this->hasMany(GameEvent::class)
+            ->where('type', GameEventType::OwnGoal->value);
+    }
+
+    /**
      * @return BelongsTo<League, $this>
      */
     public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);
+    }
+
+    /**
+     * @return Attribute<int, never>
+     */
+    protected function homeScore(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $this->goals->filter(fn ($goal) => $goal->team_id === $attributes['home_team_id'])->count()
+                + $this->ownGoals->filter(fn ($own) => $own->team_id === $attributes['away_team_id'])->count()
+        );
+    }
+
+    /**
+     * @return Attribute<int, never>
+     */
+    protected function awayScore(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $this->goals->filter(fn ($goal) => $goal->team_id === $attributes['away_team_id'])->count()
+                + $this->ownGoals->filter(fn ($own) => $own->team_id === $attributes['home_team_id'])->count()
+        );
     }
 }

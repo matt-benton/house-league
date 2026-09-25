@@ -22,9 +22,9 @@
             </div>
 
             <div class="flex items-center gap-3 sm:gap-5">
-                <span class="text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->homeScore }}</span>
+                <span class="text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->game->homeScore }}</span>
                 <span class="text-xl text-zinc-400 sm:text-2xl">-</span>
-                <span class="text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->awayScore }}</span>
+                <span class="text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white sm:text-6xl">{{ $this->game->awayScore }}</span>
             </div>
 
             <div class="min-w-0 text-center">
@@ -36,9 +36,9 @@
 
         @if ($game->is_complete)
             <div class="mt-7 text-center">
-                @if ($this->homeScore > $this->awayScore)
+                @if ($this->game->homeScore > $this->game->awayScore)
                     <flux:text variant="strong">{{ $game->homeTeam->name }} won the match.</flux:text>
-                @elseif ($this->awayScore > $this->homeScore)
+                @elseif ($this->game->awayScore > $this->game->homeScore)
                     <flux:text variant="strong">{{ $game->awayTeam->name }} won the match.</flux:text>
                 @else
                     <flux:text variant="strong">The match ended in a draw.</flux:text>
@@ -77,6 +77,12 @@
                                 <flux:icon.no-symbol variant="micro" />
                             </flux:timeline.indicator>
                             @break
+
+                        @case(GameEventType::OwnGoal->value)
+                            <flux:timeline.indicator color="red">
+                                <flux:icon.x-circle variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
                     @endswitch
 
                     <flux:timeline.content>
@@ -98,6 +104,10 @@
 
                             @case(GameEventType::Save->value)
                                 <flux:text>Save by {{ $event->player->name }} ({{ $event->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::OwnGoal->value)
+                                <flux:text>Own goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
                                 @break
                         @endswitch
                     </flux:timeline.content>

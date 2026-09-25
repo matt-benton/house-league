@@ -7,7 +7,7 @@
         @endunless
     </div>
     <div class="space-y-2">
-        @if ($match->is_complete && $homeScore > $awayScore)
+        @if ($match->is_complete && $match->homeScore > $match->awayScore)
             <div class="grid grid-cols-[48px_1fr] items-baseline">
                 <flux:text variant="strong">{{ $match->homeTeam->abbreviation }}</flux:text>
                 <flux:text size="sm" variant="subtle">{{ $match->homeTeam->record }}</flux:text>
@@ -16,7 +16,7 @@
                 <flux:text>{{ $match->awayTeam->abbreviation }}</flux:text>
                 <flux:text size="sm" variant="subtle">{{ $match->awayTeam->record }}</flux:text>
             </div>
-        @elseif ($match->is_complete && $homeScore < $awayScore)
+        @elseif ($match->is_complete && $match->homeScore < $match->awayScore)
             <div class="grid grid-cols-[48px_1fr] items-baseline">
                 <flux:text>{{ $match->homeTeam->abbreviation }}</flux:text>
                 <flux:text variant="subtle">{{ $match->homeTeam->record }}</flux:text>
@@ -37,15 +37,15 @@
         @endif
     </div>
     <div class="text-right space-y-2">
-        @if ($match->is_complete && $homeScore > $awayScore)
-            <flux:text variant="strong">{{ $homeScore }}</flux:text>
-            <flux:text>{{ $awayScore }}</flux:text>
-        @elseif ($match->is_complete && $homeScore < $awayScore)
-            <flux:text>{{ $homeScore }}</flux:text>
-            <flux:text variant="strong">{{ $awayScore }}</flux:text>
+        @if ($match->is_complete && $match->homeScore > $match->awayScore)
+            <flux:text variant="strong">{{ $match->homeScore }}</flux:text>
+            <flux:text>{{ $match->awayScore }}</flux:text>
+        @elseif ($match->is_complete && $match->homeScore < $match->awayScore)
+            <flux:text>{{ $match->homeScore }}</flux:text>
+            <flux:text variant="strong">{{ $match->awayScore }}</flux:text>
         @else
-            <flux:text>{{ $homeScore }}</flux:text>
-            <flux:text>{{ $awayScore }}</flux:text>
+            <flux:text>{{ $match->homeScore }}</flux:text>
+            <flux:text>{{ $match->awayScore }}</flux:text>
         @endif
 
     </div>

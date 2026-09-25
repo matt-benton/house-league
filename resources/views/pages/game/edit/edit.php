@@ -131,6 +131,23 @@ new class extends Component
         );
     }
 
+    public function ownGoal($playerId)
+    {
+        $player = Player::find($playerId);
+
+        $ownGoal = new GameEvent;
+        $ownGoal->type = GameEventType::OwnGoal;
+        $ownGoal->player_id = $player->id;
+        $ownGoal->team_id = $player->team_id;
+        $ownGoal->game_id = $this->game->id;
+        $ownGoal->save();
+
+        Flux::toast(
+            variant: 'danger',
+            text: "Own goal by {$player->name}!",
+        );
+    }
+
     public function deleteEvent($gameEventId)
     {
         $event = $this->game->events->firstWhere('id', $gameEventId);
@@ -145,7 +162,7 @@ new class extends Component
 
         $winningTeam = null;
 
-        if ($this->homeScore > $this->awayScore) {
+        if ($this->game->homeScore > $this->game->awayScore) {
             $winningTeam = $this->game->homeTeam;
             $winningTeam->wins++;
             $winningTeam->save();
@@ -153,7 +170,7 @@ new class extends Component
             $losingTeam = $this->game->awayTeam;
             $losingTeam->losses++;
             $losingTeam->save();
-        } elseif ($this->awayScore > $this->homeScore) {
+        } elseif ($this->game->awayScore > $this->game->homeScore) {
             $winningTeam = $this->game->awayTeam;
             $winningTeam->wins++;
             $winningTeam->save();
@@ -173,8 +190,8 @@ new class extends Component
         Flux::toast(
             variant: 'success',
             text: $winningTeam
-                ? "{$winningTeam->name} win! Final score: {$this->homeScore} ({$this->game->homeTeam->abbreviation}) - {$this->awayScore} ({$this->game->awayTeam->abbreviation})"
-                : "Tie game! Final score: {$this->homeScore} ({$this->game->homeTeam->abbreviation}) - {$this->awayScore} ({$this->game->awayTeam->abbreviation})",
+                ? "{$winningTeam->name} win! Final score: {$this->game->homeScore} ({$this->game->homeTeam->abbreviation}) - {$this->game->awayScore} ({$this->game->awayTeam->abbreviation})"
+                : "Tie game! Final score: {$this->game->homeScore} ({$this->game->homeTeam->abbreviation}) - {$this->game->awayScore} ({$this->game->awayTeam->abbreviation})",
             duration: 10000,
         );
 
@@ -185,21 +202,5 @@ new class extends Component
     public function allPlayers()
     {
         return $this->game->homeTeam->roster->concat($this->game->awayTeam->roster);
-    }
-
-    #[Computed]
-    public function homeScore()
-    {
-        return $this->game->goals()
-            ->where('team_id', $this->game->home_team_id)
-            ->count();
-    }
-
-    #[Computed]
-    public function awayScore()
-    {
-        return $this->game->goals()
-            ->where('team_id', $this->game->away_team_id)
-            ->count();
     }
 };

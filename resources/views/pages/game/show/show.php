@@ -1,10 +1,8 @@
 <?php
 
-use App\Enums\GameEventType;
 use App\Models\Game;
 use Flux\Flux;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 new class extends Component
@@ -19,24 +17,6 @@ new class extends Component
         $game->setRelation('events', $game->events->sortBy('id')->values());
 
         $this->game = $game;
-    }
-
-    #[Computed]
-    public function homeScore(): int
-    {
-        return $this->game->events
-            ->where('type', GameEventType::Goal->value)
-            ->where('team_id', $this->game->home_team_id)
-            ->count();
-    }
-
-    #[Computed]
-    public function awayScore(): int
-    {
-        return $this->game->events
-            ->where('type', GameEventType::Goal->value)
-            ->where('team_id', $this->game->away_team_id)
-            ->count();
     }
 
     public function render(): View
@@ -63,7 +43,7 @@ new class extends Component
 
     private function updateTeamRecords()
     {
-        if ($this->homeScore > $this->awayScore) {
+        if ($this->game->homeScore > $this->game->awayScore) {
             $winningTeam = $this->game->homeTeam;
             $winningTeam->wins--;
 
@@ -77,7 +57,7 @@ new class extends Component
             if ($losingTeam->losses >= 0) {
                 $losingTeam->save();
             }
-        } elseif ($this->awayScore > $this->homeScore) {
+        } elseif ($this->game->awayScore > $this->game->homeScore) {
             $winningTeam = $this->game->awayTeam;
             $winningTeam->wins--;
             if ($winningTeam->wins >= 0) {
