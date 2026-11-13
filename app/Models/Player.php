@@ -71,6 +71,22 @@ class Player extends Model
     }
 
     /**
+     * @return HasMany<GameEvent, $this>
+     */
+    public function fouls(): HasMany
+    {
+        return $this->hasMany(GameEvent::class)->where('type', GameEventType::Foul);
+    }
+
+    /**
+     * @return HasMany<GameEvent, $this>
+     */
+    public function fouled(): HasMany
+    {
+        return $this->hasMany(GameEvent::class, 'secondary_player_id')->where('type', GameEventType::Foul);
+    }
+
+    /**
      * @return HasMany<SecondaryEvent, $this>
      */
     public function assists(): HasMany

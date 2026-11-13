@@ -15,6 +15,8 @@ new class extends Component
             'yellowCards',
             'redCards',
             'assists',
+            'fouls',
+            'fouled',
         );
     }
 

@@ -309,6 +309,44 @@ test('a player can score an own goal', function () {
     expect($game->fresh()->homeScore)->toBe(0);
 });
 
+test('a player can commit a foul', function () {
+    $this->actingAs(User::factory()->admin()->make());
+    $league = League::factory()->create();
+
+    $home = Team::factory()
+        ->for($league)
+        ->has(Player::factory(), 'roster')
+        ->create();
+    $away = Team::factory()
+        ->for($league)
+        ->has(Player::factory(), 'roster')
+        ->create();
+
+    $homePlayer = $home->roster[0];
+    $fouledPlayer = $away->roster[0];
+
+    $game = Game::factory()
+        ->for($league)
+        ->for($home, 'homeTeam')
+        ->for($away, 'awayTeam')
+        ->create();
+
+    Livewire::test('pages::game.edit', ['game' => $game])
+        ->set('foulerId', $homePlayer->id)
+        ->set('fouledPlayerId', $fouledPlayer->id)
+        ->call('callFoul');
+
+    expect(GameEvent::count())->toBe(1);
+
+    $foul = GameEvent::first();
+
+    expect($foul->player_id)->toBe($homePlayer->id);
+    expect($foul->secondary_player_id)->toBe($fouledPlayer->id);
+    expect($foul->team_id)->toBe($homePlayer->id);
+    expect($foul->game_id)->toBe($game->id);
+    expect($foul->type)->toBe('foul');
+});
+
 test('it can end a match', function () {
     $this->actingAs(User::factory()->admin()->make());
     $league = League::factory()->create();

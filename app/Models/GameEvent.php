@@ -22,6 +22,14 @@ class GameEvent extends Model
     }
 
     /**
+     * @return BelongsTo<Player, $this>
+     */
+    public function secondaryPlayer(): BelongsTo
+    {
+        return $this->belongsTo(Player::class, 'secondary_player_id');
+    }
+
+    /**
      * @return BelongsTo<Team, $this>
      */
     public function team(): BelongsTo

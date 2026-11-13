@@ -78,6 +78,12 @@
                             </flux:timeline.indicator>
                             @break
 
+                        @case(GameEventType::Foul->value)
+                            <flux:timeline.indicator>
+                                <flux:icon.no-symbol variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
+
                         @case(GameEventType::OwnGoal->value)
                             <flux:timeline.indicator color="red">
                                 <flux:icon.x-circle variant="micro" />
@@ -108,6 +114,16 @@
 
                             @case(GameEventType::OwnGoal->value)
                                 <flux:text>Own goal by {{ $event->player->name }} ({{ $event->player->team->abbreviation }})</flux:text>
+                                @break
+
+                            @case(GameEventType::Foul->value)
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <flux:text>
+                                            {{ $event->secondaryPlayer->name }} fouled by {{ $event->player->name }}
+                                        </flux:text>
+                                    </div>
+                                </div>
                                 @break
                         @endswitch
                     </flux:timeline.content>

@@ -56,6 +56,22 @@
                     </flux:table.column>
                     <flux:table.column
                         sortable
+                        :sorted="$sortBy === 'fouls_count'"
+                        :direction="$sortDirection"
+                        wire:click="setSortBy('fouls_count')"
+                    >
+                        Fouls
+                    </flux:table.column>
+                    <flux:table.column
+                        sortable
+                        :sorted="$sortBy === 'fouled_count'"
+                        :direction="$sortDirection"
+                        wire:click="setSortBy('fouled_count')"
+                    >
+                        Fouled
+                    </flux:table.column>
+                    <flux:table.column
+                        sortable
                         :sorted="$sortBy === 'yellow_cards_count'"
                         :direction="$sortDirection"
                         wire:click="setSortBy('yellow_cards_count')"
@@ -84,6 +100,8 @@
                             <flux:table.cell>{{ $player->goals_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->assists_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->saves_count }}</flux:table.cell>
+                            <flux:table.cell>{{ $player->fouls_count }}</flux:table.cell>
+                            <flux:table.cell>{{ $player->fouled_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->yellow_cards_count }}</flux:table.cell>
                             <flux:table.cell>{{ $player->red_cards_count }}</flux:table.cell>
                         </flux:table.row>

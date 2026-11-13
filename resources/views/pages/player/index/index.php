@@ -50,6 +50,8 @@ new #[Title('Players')] class extends Component
                 'redCards',
                 'yellowCards',
                 'assists',
+                'fouls',
+                'fouled',
             )
             ->when($this->sortBy, fn (Builder $query) => $query->orderBy($this->sortBy, $this->sortDirection))
             ->when($this->selectedTeamId, function (Builder $query) {

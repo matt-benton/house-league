@@ -7,7 +7,6 @@ use App\Models\Player;
 use App\Models\SecondaryEvent;
 use Flux\Flux;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new class extends Component
@@ -16,11 +15,13 @@ new class extends Component
 
     public array $gameEventTypes;
 
-    #[Validate('required|exists:players,id', as: 'goal scorer')]
     public $goalScorerId;
 
-    #[Validate('nullable|exists:players,id', as: 'provider')]
     public $assisterId;
+
+    public $foulerId;
+
+    public $fouledPlayerId;
 
     public function mount(Game $game)
     {
@@ -48,9 +49,15 @@ new class extends Component
 
     public function scoreGoal()
     {
-        $this->validate();
+        $validated = $this->validate([
+            'goalScorerId' => 'required|exists:players,id',
+            'assisterId' => 'nullable|exists:players,id',
+        ], [], [
+            'goalScorerId' => 'goal scorer',
+            'assisterId' => 'provider',
+        ]);
 
-        $goalScorer = Player::find($this->goalScorerId);
+        $goalScorer = Player::find($validated['goalScorerId']);
 
         $goal = new GameEvent;
         $goal->type = GameEventType::Goal;
@@ -61,7 +68,7 @@ new class extends Component
 
         if ($this->assisterId) {
             $assist = new SecondaryEvent;
-            $assist->player_id = $this->assisterId;
+            $assist->player_id = $validated['assisterId'];
             $assist->type = 'assist';
             $goal->secondaryEvent()->save($assist);
             $assistMessage = " Assisted by {$assist->player->name}.";
@@ -146,6 +153,37 @@ new class extends Component
             variant: 'danger',
             text: "Own goal by {$player->name}!",
         );
+    }
+
+    public function callFoul()
+    {
+        $validated = $this->validate([
+            'foulerId' => 'required|exists:players,id',
+            'fouledPlayerId' => 'required|exists:players,id',
+        ], [], [
+            'foulerId' => 'offending player',
+            'fouledPlayerId' => 'fouled player',
+        ]);
+
+        $fouler = Player::find($validated['foulerId']);
+
+        $foul = new GameEvent;
+        $foul->type = GameEventType::Foul;
+        $foul->player_id = $fouler->id;
+        $foul->secondary_player_id = $validated['fouledPlayerId'];
+        $foul->team_id = $fouler->team_id;
+        $foul->game_id = $this->game->id;
+        $foul->save();
+
+        Flux::toast(
+            variant: 'warning',
+            text: "{$fouler->name} has committed a foul",
+        );
+
+        Flux::modal('foul-modal')->close();
+
+        $this->reset('foulerId');
+        $this->reset('fouledPlayerId');
     }
 
     public function deleteEvent($gameEventId)

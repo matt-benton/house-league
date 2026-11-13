@@ -78,6 +78,12 @@
                             </flux:timeline.indicator>
                             @break
 
+                        @case(GameEventType::Foul->value)
+                            <flux:timeline.indicator>
+                                <flux:icon.no-symbol variant="micro" />
+                            </flux:timeline.indicator>
+                            @break
+
                         @case(GameEventType::OwnGoal->value)
                             <flux:timeline.indicator color="red">
                                 <flux:icon.x-circle variant="micro" />
@@ -96,6 +102,17 @@
                                         @if ($event->secondaryEvent)
                                             <flux:text size="sm" class="mt-1">Assist by {{ $event->secondaryEvent->player->name }}</flux:text>
                                         @endif
+                                    </div>
+                                    <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
+                                </div>
+                                @break
+
+                            @case(GameEventType::Foul->value)
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <flux:text>
+                                            {{ $event->secondaryPlayer->name }} fouled by {{ $event->player->name }}
+                                        </flux:text>
                                     </div>
                                     <flux:button icon="x-mark" variant="subtle" wire:click="deleteEvent({{ $event->id }})" />
                                 </div>
@@ -184,6 +201,62 @@
                         </flux:select.group>
                     </flux:select>
                     <flux:error name="assisterId" />
+                </flux:field>
+
+                <div class="flex">
+                    <flux:spacer />
+                    <flux:button type="submit" variant="primary">Confirm</flux:button>
+                </div>
+            </form>
+        </flux:modal>
+
+        <!-- foul -->
+        <flux:modal.trigger name="foul-modal">
+            <flux:button class="mb-2">
+                Foul
+            </flux:button>
+        </flux:modal.trigger>
+
+        <flux:modal name="foul-modal" class="md:w-96">
+            <form wire:submit="callFoul" class="space-y-6">
+                <flux:heading size="lg">Foul Called</flux:heading>
+
+                <flux:field>
+                    <flux:label>Offending Player</flux:label>
+                    <flux:select wire:model="foulerId">
+                        <flux:select.option>Select a player</flux:select.option>
+                        <flux:select.group label="{{ $game->homeTeam->name }}">
+                            @foreach ($game->homeTeam->roster as $player)
+                                <flux:select.option value="{{ $player->id }}">{{ $player->name }}</flux:select.option>
+                            @endforeach
+                        </flux:select.group>
+
+                        <flux:select.group label="{{ $game->awayTeam->name }}">
+                            @foreach ($game->awayTeam->roster as $player)
+                                <flux:select.option value="{{ $player->id }}">{{ $player->name }}</flux:select.option>
+                            @endforeach
+                        </flux:select.group>
+                    </flux:select>
+                    <flux:error name="foulerId" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Fouled Player</flux:label>
+                    <flux:select wire:model="fouledPlayerId">
+                        <flux:select.option>Select a player</flux:select.option>
+                        <flux:select.group label="{{ $game->homeTeam->name }}">
+                            @foreach ($game->homeTeam->roster as $player)
+                                <flux:select.option value="{{ $player->id }}">{{ $player->name }}</flux:select.option>
+                            @endforeach
+                        </flux:select.group>
+
+                        <flux:select.group label="{{ $game->awayTeam->name }}">
+                            @foreach ($game->awayTeam->roster as $player)
+                                <flux:select.option value="{{ $player->id }}">{{ $player->name }}</flux:select.option>
+                            @endforeach
+                        </flux:select.group>
+                    </flux:select>
+                    <flux:error name="fouledPlayerId" />
                 </flux:field>
 
                 <div class="flex">

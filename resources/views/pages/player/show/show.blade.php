@@ -31,11 +31,15 @@
         </div>
         <div>
             <flux:separator text="Discipline" />
-            <div class="grid grid-cols-2 gap-y-3 mt-5 items-center">
+            <div class="grid grid-cols-4 gap-y-3 mt-5 items-center">
+                <flux:heading align="center">Fouls</flux:heading>
+                <flux:heading align="center">Fouled</flux:heading>
                 <flux:heading align="center">Yellow Cards</flux:heading>
                 <flux:heading align="center">Red Cards</flux:heading>
 
-                <flux:heading align="center" size="xl">{{ $player->yellow_cards_count }}</flux:heading>
+                <flux:heading align="center" size="xl">{{ $player->fouls_count }}</flux:heading>
+                <flux:heading align="center" size="xl">{{ $player->fouled_count }}</flux:heading>
+                <flux:heading align="center" size="xl">{{ $player->red_cards_count }}</flux:heading>
                 <flux:heading align="center" size="xl">{{ $player->red_cards_count }}</flux:heading>
             </div>
         </div>

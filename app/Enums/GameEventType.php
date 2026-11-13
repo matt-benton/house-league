@@ -9,6 +9,7 @@ enum GameEventType: string
     case RedCard = 'red card';
     case YellowCard = 'yellow card';
     case Save = 'save';
+    case Foul = 'foul';
 
     /**
      * @return list<string>
